@@ -5,6 +5,7 @@ import Videos from "./Component/Videos"
 import Shorts from "./Routes/Shorts"
 import Categories from "./Component/Categories"
 import Subscriptions from "./Routes/Subscriptions"
+import Feedyou from "./Routes/FeedYou"
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
     {
       path:"feed/subscriptions",
       element:<Subscriptions />,
+      errorElement:<NotFound />,
+    },
+    {
+      path:"feed/you",
+      element:<Feedyou />,
       errorElement:<NotFound />,
     }
   ]
