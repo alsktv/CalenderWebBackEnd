@@ -51,7 +51,6 @@ export default function RootHeader(){
       </Box>
      </HStack>
      <Divider></Divider>
-     <Categories />
    </Box>
   )
 }
