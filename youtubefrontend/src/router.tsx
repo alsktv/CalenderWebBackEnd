@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import Root from "./Routes/Root"
 import NotFound from "./Routes/NotFound"
 import Video from "./Component/Video"
-import VideoDetail from "./Routes/VideoDetail"
+import Shorts from "./Routes/Shorts"
 
 
 const router = createBrowserRouter([
@@ -10,12 +10,15 @@ const router = createBrowserRouter([
     path:"",
     element:<Root />,
     errorElement:<NotFound />,
-  },
-  {
-    path:"video/:id",
-    element:<VideoDetail />,
+    children: [   {
+      path:"shorts/:shortPk",
+      element:<Shorts />,
+      errorElement:<NotFound />,
+    }
+  ]
+
     
-  }
+  },
 ])
 
 export default router
