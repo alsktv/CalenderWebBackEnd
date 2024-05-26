@@ -1,15 +1,16 @@
-import { Box, HStack, Image, Text , Button, VStack } from "@chakra-ui/react";
-import { getShorts } from "../api";
-import { useQuery,useMutation, useQueryClient  } from "react-query";
-import { useEffect, useState } from "react";
+import { useEffect , useState } from "react";
+import { useQuery ,useMutation , useQueryClient } from "react-query";
+import { useParams , useNavigate } from "react-router-dom";
+
 import { AiFillLike , AiFillDislike } from "react-icons/ai";
 import { MdMessage } from "react-icons/md";
-import { FaShare ,FaArrowUp ,  FaLongArrowAltDown} from "react-icons/fa";
+import { FaShare , FaArrowUp ,  FaLongArrowAltDown} from "react-icons/fa";
 import { CiMenuKebab } from "react-icons/ci";
-import { useParams } from "react-router-dom";
-import { getUser } from "../api";
-import { PutSubscribe } from "../api";
-import { Link,useNavigate} from "react-router-dom";
+
+import { getUser , PutSubscribe , getShorts } from "../api";
+
+import { Box, HStack, VStack , Image, Text , Button  } from "@chakra-ui/react";
+
 
 
 interface IShort {
@@ -37,16 +38,23 @@ interface IShort {
 export default function Shorts() {
 
  const [IsSubscribe, setIsSubscribe] = useState<boolean>()
- const {isLoading:userIsLoading , data:userData} = useQuery({queryKey:["users"] , queryFn:getUser } )
- const {isLoading, data} = useQuery<IShort[]>({queryKey:["short"] , queryFn:getShorts})
+
  const {shortPk} = useParams();
- const pk= Number(shortPk)
- const navigate = useNavigate()
-  
+ const pk= Number(shortPk);
 
-  const queryClient = useQueryClient();
+ const navigate = useNavigate();
 
-    // 데이터 업데이트 뮤테이션
+ const queryClient = useQueryClient();
+
+ const {isLoading, data} = useQuery<IShort[]>({
+    queryKey:["short"] ,
+    queryFn:getShorts ,
+})
+ const {isLoading:userIsLoading , data:userData} = useQuery({
+    queryKey:["users"] ,
+    queryFn:getUser ,
+  })
+
   const mutation = useMutation(PutSubscribe, {
     onSuccess: () => {
       // 업데이트가 성공하면 쿼리 무효화 (갱신)
@@ -70,13 +78,6 @@ const CheakSubscribe =   () =>{     //사용자가 short의 영상 주인을 구
     console.log(" no userData")
   }
 
-  useEffect(() => {
-    // userData가 정의되었을 때에만 실행
-    if (userData) {
-      CheakSubscribe();
-    }
-  }, [userData]);
-
  // '{ name: string; image: string; subscribe_count: Number; }' 형식에 '{ name: string; image: string; subscribe_count: Number; }[]' 형식의 length, pop, push, concat 외 35개 속성이 없습니다.ts(2740)  이거는 리스트를 줘야하는 상황에 단일 값을 줬을 때 발생하는 에러임
 const onClickSubscribe =  async() =>{
   try{
@@ -90,7 +91,7 @@ const onClickSubscribe =  async() =>{
   } catch(error){
     console.log(error)
   }
-
+  //버튼이 눌렸을 때 실행되게 만들어줌
   CheakSubscribe()
   console.log("ISsubscribe",IsSubscribe)
 }
@@ -105,61 +106,73 @@ const onClickUpDown = (arrow:string) => (event: React.MouseEvent<HTMLButtonEleme
   }
 }
 
+useEffect(() => {
+  if (userData) {
+    CheakSubscribe();
+  }
+},
+ [userData]);
+
   return(
         <Box>
 
       {isLoading &&  userIsLoading
  ? <Text> loading...</Text> :
       <HStack> 
-                   <VStack>
-                  <iframe
-      width="360"
-      height="225"
-      src={data?.[pk-1]?.video.replace(/"/g, '')}
-      title="YouTube video player"
-      frameBorder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
+        <VStack>
+          <iframe
+            width="360"
+            height="225"
+            src={data?.[pk-1]?.video.replace(/"/g, '')} //pk-1을 해야됨. 왜냐하면 리스트는 0부터 시작하기 때문이다. 그리고 ""가 추가되어 있으면 에러가 나기 때문에 ""붙여줘야함.
+            title="YouTube video player"
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
     ></iframe>
-    <Box textAlign={"center"}>
-    <HStack>
-      
-        <Image src={data?.[pk-1]?.user.image} w={"5%"} rounded={"50%"}/>
-    <Text>{data?.[pk-1]?.user.name}</Text>
-    <Button onClick={onClickSubscribe}> {IsSubscribe ? "구독" : "구독중"} </Button>
-     {/**/}
-    </HStack>
-    </Box>
-  </VStack>
-         <VStack>
-           <VStack>   
+          <Box textAlign={"center"}>
+
+            <HStack>
+
+              <Image src={data?.[pk-1]?.user.image} w={"5%"} rounded={"50%"}/>
+              <Text>{data?.[pk-1]?.user.name}</Text>
+              <Button onClick={onClickSubscribe}> {IsSubscribe ? "구독" : "구독중"} </Button>
+
+            </HStack>
+
+          </Box>
+
+        </VStack>
+
+        <VStack>
+
+          <VStack>   
             <Button rounded={"50%"}><AiFillLike /></Button>
             <Text>좋아요</Text>
-           </VStack>
+          </VStack>
 
-           <VStack> 
+          <VStack> 
             <Button rounded={"50%"}><AiFillDislike /></Button>
             <Text>싫어요</Text>
-           </VStack>
+          </VStack>
 
-           <VStack> 
+          <VStack> 
             <Button rounded={"50%"}> <MdMessage /></Button>
             <Text>{data?.[pk-1]?.review_count.toString()}</Text>
-           </VStack>
+          </VStack>
 
-           <VStack> 
+          <VStack> 
             <Button rounded={"50%"}><FaShare /></Button>
             <Text>공유</Text>
-           </VStack>
+          </VStack>
 
            <Button rounded={"50%"}> <CiMenuKebab /> </Button>
-         </VStack>
+          </VStack>
 
-         <VStack>
-          <Button my={200} onClick={onClickUpDown("up")}> <FaArrowUp /> </Button>   
-          
-           <Button onClick={onClickUpDown("down")}> < FaLongArrowAltDown /> </Button> 
-        </VStack>
+          <VStack>
+            <Button my={200} onClick={onClickUpDown("up")}> <FaArrowUp /> </Button>   
+            <Button onClick={onClickUpDown("down")}> < FaLongArrowAltDown /> </Button> 
+          </VStack>
+
         </HStack>  
 }
 </Box>

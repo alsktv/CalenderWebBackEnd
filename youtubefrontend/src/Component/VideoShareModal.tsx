@@ -1,6 +1,7 @@
-import { Box , Modal, ModalOverlay,ModalContent, ModalBody, VStack, Button,} from "@chakra-ui/react"
 import { CiVideoOn } from "react-icons/ci";
 import { MdLiveTv } from "react-icons/md";
+
+import { Box , Modal,ModalContent, ModalBody, VStack, Button,} from "@chakra-ui/react"
 
 interface ModalProp{
   isOpen:boolean

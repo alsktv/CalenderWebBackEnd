@@ -1,8 +1,10 @@
-import { Grid , GridItem , Box, Text} from "@chakra-ui/react"
-import { useState } from "react"
 import { useQuery } from "react-query"
+
 import { getVideos } from "../api"
+import VideoSize from "../VideoSize"
 import Video from "./Video"
+
+import { Grid , GridItem , Box, Text, HStack, VStack , Image} from "@chakra-ui/react"
 
 interface IProp {
   selectCategory:String
@@ -49,7 +51,17 @@ export default function Videos({selectCategory}:IProp) {
            {select()?.map((item) => (
             <GridItem key = {item.pk.toString()}>
               
-              <Video src={item.video} name={item.name} pk={item.pk} user = {item.user} view_count = {item.view_count} time = {item.time_difference} />
+              <Video src={item.video} name={item.name} pk={item.pk} user = {item.user} view_count = {item.view_count} time = {item.time_difference} size={VideoSize("middle")} />
+              <Box >
+                <HStack> 
+                  <Image src = {item.user.image} width={"10%"} rounded={"50%"} />
+                  <VStack>
+                    <Text> 제목:{item.name}</Text>
+                    <Text> {item.user.name}</Text>
+                    <Text> 조회수 : {item.view_count.toString()} / {item.time_difference}</Text>
+                  </VStack>
+                </HStack>
+              </Box>
             </GridItem>
           ))}
   

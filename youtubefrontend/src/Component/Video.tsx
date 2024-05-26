@@ -13,30 +13,25 @@ interface IProp {
 }
   view_count : Number 
   time: string
+  size:{
+    width:string
+    height:string
+  }
 }
 
-export default function Video ({src,name,pk,user,view_count,time}:IProp) {
+export default function Video ({src , name , pk , user , view_count , time , size}:IProp) {
   return (
     <Box>
       <iframe
-    width="360"
-    height="225"
+    width={size.width}
+    height={size.height}
     src={src.replace(/"/g, '')}
     title="YouTube video player"
     frameBorder="0" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowFullScreen
   ></iframe>
-    <Box >
-      <HStack> 
-        <Image src = {user.image} width={"10%"} rounded={"50%"} />
-        <VStack>
-          <Text> 제목:{name}</Text>
-          <Text> {user.name}</Text>
-          <Text> 조회수 : {view_count.toString()} / {time}</Text>
-        </VStack>
-      </HStack>
-    </Box>
+
 
     </Box>
 

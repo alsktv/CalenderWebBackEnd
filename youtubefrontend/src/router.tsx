@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom"
+
 import Root from "./Routes/Root"
 import NotFound from "./Routes/NotFound"
-import Videos from "./Component/Videos"
 import Shorts from "./Routes/Shorts"
-import Categories from "./Component/Categories"
 import Subscriptions from "./Routes/Subscriptions"
 import Feedyou from "./Routes/FeedYou"
+import VideoDetail from "./Routes/VideoDetail"
+import Categories from "./Component/Categories"
 
 
 const router = createBrowserRouter([
@@ -32,7 +33,12 @@ const router = createBrowserRouter([
       path:"feed/you",
       element:<Feedyou />,
       errorElement:<NotFound />,
-    }
+    },
+    {
+      path:"videos/:videoPk",
+      element:<VideoDetail />,
+      errorElement:<NotFound />,
+    },
   ]
 
     

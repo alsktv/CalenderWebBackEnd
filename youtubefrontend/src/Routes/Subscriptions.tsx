@@ -1,15 +1,18 @@
-import { DEFAULT_ECDH_CURVE } from "tls";
-import { getUser } from "../api";
 import { useQuery } from "react-query";
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+
+import { getUser } from "../api";
 import Video from "../Component/Video";
+import VideoSize from "../VideoSize";
+
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+
 
 interface IVideo {
   name:string
-user: Number
-video:string
-view_count:Number
-time_difference: string
+  user: Number
+  video:string
+  view_count:Number
+  time_difference: string
 }
 
 interface IUser {
@@ -28,16 +31,23 @@ export default function Subscriptions() {
        {userIsLoading ? <Text> loading...</Text> :
              <Box>
              
-               <Grid templateColumns='repeat(3, 1fr)' templateRows={"repeat(3,1fr)"} gap={6}>
+              <Grid templateColumns='repeat(3, 1fr)' templateRows={"repeat(3,1fr)"}   gap=  {6}>
        
-                  {userData.subscribe?.map((item:IUser) => (
+                  {
+                  userData.subscribe?.map((item:IUser) => (
+
                     item.videos?.map((video:IVideo) => (
-                       <Video src = {video.video} name = {video.name} pk = {video.user}user = {item} view_count = {video.view_count} time = {video.time_difference} />
+                      <GridItem>
+
+                        <Video src={video.video} name={video.name} pk={video.user} user = {item} view_count = {video.view_count} time = {video.time_difference} size = {VideoSize("small")} />
+
+                      </GridItem>
                     ))
-                 )) }
+                 )) 
+                 }
          
-               </Grid>
-               </Box>
+              </Grid>
+            </Box>
        }
      </Box>
   )
