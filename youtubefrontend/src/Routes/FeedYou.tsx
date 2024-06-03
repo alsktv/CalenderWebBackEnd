@@ -1,10 +1,13 @@
 import { useQuery } from "react-query";
 
-import { getUser } from "../api";
+import { getUser , putRecentVideos } from "../api";
 import Video from "../Component/Video";
 import VideoSize from "../VideoSize";
 
 import { Box, HStack, VStack , Image , Text , Button, Heading, Grid, GridItem} from "@chakra-ui/react";
+
+import { Link } from "react-router-dom";
+import VideoDescription from "../Component/Video_description";
 
 interface IVideo {
   categories:{name:string}
@@ -35,6 +38,7 @@ export default  function Feedyou(){
     queryFn:getUser 
   })
 
+
   return(
    <Box>
     {userIsLoading ? <Text> loading...</Text> : 
@@ -55,6 +59,34 @@ export default  function Feedyou(){
              <Heading mr={500}>기록</Heading>
              <Button rounded={"20%"}> 모두 보기 </Button>
             </HStack>
+            <HStack>
+              <Grid templateColumns='repeat(5, 1fr)' templateRows={"repeat(3,1fr)"} gap={6}>
+                    <GridItem key = {userData.recent_video1.pk.toString()}>
+                
+                    <Video src={userData.recent_video1.video} name={userData.recent_video1.name} pk={userData.recent_video1.pk} user = {userData.recent_video1.user} view_count = {userData.recent_video1.view_count} time = {userData.recent_video1.time_difference} size={VideoSize("middle")} />
+                    <Box >
+                      <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video1.pk}  user_name = {userData.recent_video1.user.name} video_name = {userData.recent_video1.name}    view_count = {userData.recent_video1.view_count}  time_difference  = {userData.recent_video1.time_difference} />
+                    </Box>
+                  </GridItem>
+
+                  <GridItem key = {userData.recent_video2.pk.toString()}>
+                
+                <Video src={userData.recent_video2.video} name={userData.recent_video2.name} pk={userData.recent_video2.pk} user = {userData.recent_video2.user} view_count = {userData.recent_video2.view_count} time = {userData.recent_video2.time_difference} size={VideoSize("middle")} />
+                <Box >
+                  <VideoDescription  image = {userData.recent_video2.user.image} pk = {userData.recent_video2.pk}  user_name = {userData.recent_video2.user.name} video_name = {userData.recent_video2.name}    view_count = {userData.recent_video2.view_count}  time_difference  = {userData.recent_video2.time_difference} />
+                </Box>
+              </GridItem>
+
+              <GridItem key = {userData.recent_video3.pk.toString()}>
+                
+                <Video src={userData.recent_video3.video} name={userData.recent_video3.name} pk={userData.recent_video3.pk} user = {userData.recent_video3.user} view_count = {userData.recent_video3.view_count} time = {userData.recent_video3.time_difference} size={VideoSize("middle")} />
+                <Box >
+                  <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video3.pk}  user_name = {userData.recent_video3.user.name} video_name = {userData.recent_video3.name}    view_count = {userData.recent_video3.view_count}  time_difference  = {userData.recent_video3.time_difference} />
+                </Box>
+              </GridItem>
+                </Grid>
+      
+            </HStack>
             
         </Box>
         <Box my={15}>
@@ -64,7 +96,7 @@ export default  function Feedyou(){
               <Text ml={10}>{userData.likeVideo.length}</Text>
             </HStack>
             <Button rounded={"20%"}> 모두 보기 </Button>
-          </HStack>
+          </HStack> 
 
           <Grid templateColumns='repeat(5, 1fr)' templateRows={"repeat(3,1fr)"} gap={6}>
 

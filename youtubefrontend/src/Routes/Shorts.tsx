@@ -8,6 +8,7 @@ import { FaShare , FaArrowUp ,  FaLongArrowAltDown} from "react-icons/fa";
 import { CiMenuKebab } from "react-icons/ci";
 
 import { getUser , PutSubscribe , getShorts } from "../api";
+import { SubscribeButton } from "../Component/SubscribeButton";
 
 import { Box, HStack, VStack , Image, Text , Button  } from "@chakra-ui/react";
 
@@ -44,8 +45,6 @@ export default function Shorts() {
 
  const navigate = useNavigate();
 
- const queryClient = useQueryClient();
-
  const {isLoading, data} = useQuery<IShort[]>({
     queryKey:["short"] ,
     queryFn:getShorts ,
@@ -55,46 +54,6 @@ export default function Shorts() {
     queryFn:getUser ,
   })
 
-  const mutation = useMutation(PutSubscribe, {
-    onSuccess: () => {
-      // 업데이트가 성공하면 쿼리 무효화 (갱신)
-      queryClient.invalidateQueries('users');
-    },
-  });
-    
-const CheakSubscribe =   () =>{     //사용자가 short의 영상 주인을 구독했는지를 판단할 수 있는 함수. 구독이 되어있다면 true를, 아니면 false를 반환한다. userData는 로그인 된 유저, pk 는 영상 주인의 user모델에 있는 pk값임
-  
-    if(userData){
-      for(let i=0 ; i < userData.subscribe.length ;i++){ 
-        if(userData.subscribe[i].pk === data?.[pk-1].user.pk){
-          //console.log("working")
-          setIsSubscribe(true)
-          return(true)
-        }
-      }
-      setIsSubscribe(false)
-      return(false)
-    }
-    console.log(" no userData")
-  }
-
- // '{ name: string; image: string; subscribe_count: Number; }' 형식에 '{ name: string; image: string; subscribe_count: Number; }[]' 형식의 length, pop, push, concat 외 35개 속성이 없습니다.ts(2740)  이거는 리스트를 줘야하는 상황에 단일 값을 줬을 때 발생하는 에러임
-const onClickSubscribe =  async() =>{
-  try{
-    const list : Number[] = []
-
-    if (data){
-      list.push(data?.[pk-1].user.pk)
-    }
-    await mutation.mutate(list);
-    //PutSubscribe(list)
-  } catch(error){
-    console.log(error)
-  }
-  //버튼이 눌렸을 때 실행되게 만들어줌
-  CheakSubscribe()
-  console.log("ISsubscribe",IsSubscribe)
-}
 
 const onClickUpDown = (arrow:string) => (event: React.MouseEvent<HTMLButtonElement>) => {
   if(arrow === "up" && pk !== 1){
@@ -106,12 +65,6 @@ const onClickUpDown = (arrow:string) => (event: React.MouseEvent<HTMLButtonEleme
   }
 }
 
-useEffect(() => {
-  if (userData) {
-    CheakSubscribe();
-  }
-},
- [userData]);
 
   return(
         <Box>
@@ -135,8 +88,7 @@ useEffect(() => {
 
               <Image src={data?.[pk-1]?.user.image} w={"5%"} rounded={"50%"}/>
               <Text>{data?.[pk-1]?.user.name}</Text>
-              <Button onClick={onClickSubscribe}> {IsSubscribe ? "구독" : "구독중"} </Button>
-
+              <SubscribeButton />
             </HStack>
 
           </Box>

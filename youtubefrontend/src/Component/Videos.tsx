@@ -1,10 +1,11 @@
-import { useQuery } from "react-query"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import { Link } from "react-router-dom"
 
-import { getVideos } from "../api"
+import { getVideos, putRecentVideos, PutSubscribe } from "../api"
 import VideoSize from "../VideoSize"
 import Video from "./Video"
 
-import { Grid , GridItem , Box, Text, HStack, VStack , Image} from "@chakra-ui/react"
+import { Grid , GridItem , Box, Text, HStack, VStack , Image } from "@chakra-ui/react"
 
 interface IProp {
   selectCategory:String
@@ -34,7 +35,17 @@ export default function Videos({selectCategory}:IProp) {
     item.categories.name === selectCategory
    )
 
+   const queryClient = useQueryClient();
+  
 
+   const mutation = useMutation(putRecentVideos, {   //제목을 눌렀을 시 최근 본 영상에 추가하기 위해 만든  mutation임
+     onSuccess: () => {
+       // 업데이트가 성공하면 쿼리 무효화 (갱신)
+       queryClient.invalidateQueries('users');
+     },
+   });
+
+  
   const select = () => {
       {if(selectCategory === "전체"){
         return(data)
@@ -42,7 +53,13 @@ export default function Videos({selectCategory}:IProp) {
         return(filteringData)
       }}
   }
-  
+
+  const onClickTitle = (pk:Number) => (e:React.MouseEvent<HTMLDivElement>) => {
+    const list:Number[] = []
+    list.push(pk) 
+    mutation.mutate(list)
+   }
+    
   return(
      <Box>
       {isLoading ? <Text> loading...</Text> : 
@@ -56,7 +73,7 @@ export default function Videos({selectCategory}:IProp) {
                 <HStack> 
                   <Image src = {item.user.image} width={"10%"} rounded={"50%"} />
                   <VStack>
-                    <Text> 제목:{item.name}</Text>
+                    <Link to={`/videos/${item.pk}`} ><Box onClick={onClickTitle(item.pk)}><Text > 제목:{item.name}</Text></Box> </Link>
                     <Text> {item.user.name}</Text>
                     <Text> 조회수 : {item.view_count.toString()} / {item.time_difference}</Text>
                   </VStack>

@@ -7,6 +7,7 @@ import Subscriptions from "./Routes/Subscriptions"
 import Feedyou from "./Routes/FeedYou"
 import VideoDetail from "./Routes/VideoDetail"
 import Categories from "./Component/Categories"
+import LogIn from "./Routes/LogIn"
 
 
 const router = createBrowserRouter([
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
 
     
   },
+  {
+    path:"/logIn",
+    element:<LogIn />,
+    errorElement:<NotFound />,
+  }
 ])
 
 export default router
