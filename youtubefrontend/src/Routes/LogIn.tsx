@@ -28,12 +28,12 @@ export default function LogIn(){
       // 업데이트가 성공하면 쿼리 무효화 (갱신)
       setToken(data.token);
       
-      if(token === "wrong"){
+      if(data.token === "wrong"){
         console.log("worng")
       }else{
-        console.log(data , token)
         try{
-          const userData = jwtDecode<JwtPayload>(data.token)      
+          localStorage.setItem('jwtToken', data.token);
+          //const userData = jwtDecode<JwtPayload>(data.token)      
           navigate("/")
         }catch(error){
           console.log(error)

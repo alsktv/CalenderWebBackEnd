@@ -4,7 +4,9 @@ import { jwtDecode } from "jwt-decode";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6MX0.rQHCuEbVrE0czYg9M96OHzc6LndtsKM7xMaytXMCFrI"
+//let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6MX0.rQHCuEbVrE0czYg9M96OHzc6LndtsKM7xMaytXMCFrI"
+
+let token = localStorage.getItem("jwtToken")
 
 interface IVideo {  //IAlertVideo의 interface
   name: string
@@ -17,8 +19,20 @@ interface IAlertVideo {  //api에서 가져온 alert정보에 관한 interface
 
 }
 
-let decodedToken = jwtDecode<jwtPayLoad>(token);  //jwtdecode에는 generic값을 넣어줘야 함. 그 값은 이 함수가 반환하는 값(object)의 형태임
-let pk: number = decodedToken["pk"];
+const makeToken = () =>{
+  if(token){
+    let decodedToken = jwtDecode<jwtPayLoad>(token);  //jwtdecode에는 generic값을 넣어줘야 함. 그 값은 이 함수가 반환하는 값(object)의 형태임
+    
+    return decodedToken["pk"];
+  } else {
+    console.log("token does not exist")
+    return null
+  }
+  
+}
+
+
+
 
 {/* 반드시 jwt해줄때는 headers 에 알맞은 token값 넣어줘야함!!!  v[{name:"fff" , pk:3}]*/ }
 export const getCategories = async () => {
@@ -43,6 +57,8 @@ interface jwtPayLoad {
 
 export const getAlertVideo = async () => {  // Api에서 alert_video 가져오는 함수
   try {
+    
+    const pk = makeToken()
     const response = await axios.get(`http://127.0.0.1:8000/api/v1/users/${pk}`, {
       headers: {
         "Authorization": token
@@ -58,6 +74,7 @@ export const getAlertVideo = async () => {  // Api에서 alert_video 가져오�
 
 export const getUser = async () => {
   try {
+    const pk = makeToken()
     const response = await axios.get(`http://127.0.0.1:8000/api/v1/users/${pk}`, {
       headers: {
         "Authorization": token
@@ -114,6 +131,7 @@ interface IPutSubscribeProp {
   }
   
   try{
+    const pk = makeToken()
         const response = await axios.put(`http://127.0.0.1:8000/api/v1/users/${pk}`,{
           subscribe:list
    },{headers:{"Authorization":token}})
@@ -171,6 +189,7 @@ export const getUserDetail = async(pk:Number) => {
 
 export const putRecentVideos = async(data:Number[]) => {
   try{
+    const pk = makeToken()
     const response = await axios.put(`http://127.0.0.1:8000/api/v1/users/${pk}`,
       {
         "recent_video" : data
@@ -204,8 +223,6 @@ export const postLogin = async (user:ILogin) => {
       }
     })
     token = response.data.token
-    decodedToken = jwtDecode<jwtPayLoad>(token); 
-    pk = decodedToken.pk
 
 
     return response.data
