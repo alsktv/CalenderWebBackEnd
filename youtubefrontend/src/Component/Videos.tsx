@@ -7,16 +7,19 @@ import Video from "./Video"
 
 import { Grid , GridItem , Box, Text, HStack, VStack , Image } from "@chakra-ui/react"
 
+import VideoDescription from "./Video_description"
+
 interface IProp {
   selectCategory:String
 }
 
 interface IVideo {
-    pk:Number
+    pk:number
     user: {
         name: string
         image: string
-        subscribe_count: Number
+        subscribe_count: number
+        pk:number
     },
     name: string
     video:  string
@@ -70,14 +73,7 @@ export default function Videos({selectCategory}:IProp) {
               
               <Video src={item.video} name={item.name} pk={item.pk} user = {item.user} view_count = {item.view_count} time = {item.time_difference} size={VideoSize("middle")} />
               <Box >
-                <HStack> 
-                  <Image src = {item.user.image} width={"10%"} rounded={"50%"} />
-                  <VStack>
-                    <Link to={`/videos/${item.pk}`} ><Box onClick={onClickTitle(item.pk)}><Text > 제목:{item.name}</Text></Box> </Link>
-                    <Text> {item.user.name}</Text>
-                    <Text> 조회수 : {item.view_count.toString()} / {item.time_difference}</Text>
-                  </VStack>
-                </HStack>
+                <VideoDescription image={item.user.image} pk={item.pk} user_name={item.user.name} video_name={item.name}   view_count={item.view_count.toString()} time_difference = {item.time_difference} user_pk={item.user.pk}/>
               </Box>
             </GridItem>
           ))}

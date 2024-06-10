@@ -8,6 +8,11 @@ import Feedyou from "./Routes/FeedYou"
 import VideoDetail from "./Routes/VideoDetail"
 import Categories from "./Component/Categories"
 import LogIn from "./Routes/LogIn"
+import FeedSubscription from "./Routes/FeedSubscription"
+import SearchResult from "./Routes/SearchResult"
+import UserDetail from "./Routes/UserDetail"
+import UserFeatured from "./Routes/UserFeatured"
+import UserVideos from "./Routes/UserVideos"
 
 
 const router = createBrowserRouter([
@@ -26,11 +31,6 @@ const router = createBrowserRouter([
       errorElement:<NotFound />,
     },
     {
-      path:"feed/subscriptions",
-      element:<Subscriptions />,
-      errorElement:<NotFound />,
-    },
-    {
       path:"feed/you",
       element:<Feedyou />,
       errorElement:<NotFound />,
@@ -40,6 +40,33 @@ const router = createBrowserRouter([
       element:<VideoDetail />,
       errorElement:<NotFound />,
     },
+    {
+      path:"feed/subscription",
+      element:<FeedSubscription />,
+      errorElement:<NotFound />,
+    },
+    {
+      path:"result",
+      element:<SearchResult />,
+      errorElement:<NotFound />,
+    },
+    {
+      path:"users/:userPk",
+      element:<UserDetail />,
+      errorElement:<NotFound />,
+      children:[
+        {
+          path:"featured",
+          element:<UserFeatured />,
+          errorElement:<NotFound />,
+        },
+        {
+          path:"videos",
+          element:<UserVideos />,
+          errorElement:<NotFound />,
+        }
+      ]
+    }
   ]
 
     

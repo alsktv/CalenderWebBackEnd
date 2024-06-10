@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient , useQuery , useMutation } from "react-query";
 
-import { getShorts, getUser , getVideos, PutSubscribe } from "../api";
+import { getShorts, getUser , getUserDetail, getVideos, PutSubscribe } from "../api";
 
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Text, useBreakpointValue } from "@chakra-ui/react";
 
 
 export  function SubscribeButton() {
@@ -17,9 +17,10 @@ export  function SubscribeButton() {
     },
   });
 
-  const {shortPk , videoPk} = useParams();
+  const {shortPk , videoPk , userPk} = useParams();
   const s_pk = Number(shortPk)
   const v_pk = Number(videoPk)
+  const u_pk = Number(userPk)
 
   const {isLoading:userIsLoading , data:userData} = useQuery({
     queryKey:["users"] ,
@@ -32,6 +33,14 @@ export  function SubscribeButton() {
   const {isLoading:videoIsLoading , data:videoData} = useQuery({
     queryKey:["videos"] ,
     queryFn:getVideos,
+  })
+
+  const userDetail = () => {
+    getUserDetail(Number(userPk))
+  }
+  const {isLoading:userDatailIsLoading , data:userDetailData} = useQuery({
+    queryKey:["videos"] ,
+    queryFn:userDetail,
   })
 
 
@@ -51,11 +60,22 @@ export  function SubscribeButton() {
       }
       console.log(" no userData")
     }
-     else if(videoPk) {
+    else if(videoPk) {
       if(userData){
         for(let i=0 ; i < userData.subscribe.length ;i++){ 
           if(userData.subscribe[i].pk ===  videoData?.[v_pk-1].user.pk){
             //console.log("working")
+            return("구독중")
+          }
+        }
+        return("구독")
+      }
+     console.log(" no userData")
+    }
+    else if(userPk) {
+      if(userData){
+        for(let i=0 ; i < userData.subscribe.length ;i++){ 
+          if(userData.subscribe[i].pk ===  Number(userPk)){
             return("구독중")
           }
         }
@@ -96,11 +116,22 @@ export  function SubscribeButton() {
       } catch(error){
         console.log(error)
       }
-    } else {
+    }  else if (userPk) {    //userDetail에서 구독 버튼을 눌렀을 때 처리하는 식
+      try{   
+        const list : Number[] = []
+        list.push(Number(userPk))
+
+        await mutation.mutate(list);
+        console.log(list)
+      } catch(error){
+        console.log(error)
+      }
+    } 
+    else {
       console.log("pk does not exist")
     }
   }
-  if(!userIsLoading && !videoIsLoading && !shortIsLoading){
+    if(!userIsLoading && !videoIsLoading && !shortIsLoading  && !userDatailIsLoading){
     return <Button onClick={onClickSubscribe}> {cheakSubscribe()}</Button>
   }
    return (<Text>fff</Text>)

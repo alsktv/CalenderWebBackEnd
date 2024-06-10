@@ -12,24 +12,24 @@ import VideoDescription from "../Component/Video_description";
 interface IVideo {
   categories:{name:string}
   name:string
-  pk:Number
+  pk:number
   time_difference:string
   user: {
-    pk: Number
+    pk: number
     name: string
     image:string 
-    subscribe_count:Number
+    subscribe_count:number
   }
 
      videos:{
       name: string
       time_difference:string
-      user:Number
+      user:number
       video:string
-      view_count:Number
+      view_count:number
      } []  
    video:string
-   view_count:Number
+   view_count:number
 }
 
 export default  function Feedyou(){
@@ -65,7 +65,7 @@ export default  function Feedyou(){
                 
                     <Video src={userData.recent_video1.video} name={userData.recent_video1.name} pk={userData.recent_video1.pk} user = {userData.recent_video1.user} view_count = {userData.recent_video1.view_count} time = {userData.recent_video1.time_difference} size={VideoSize("middle")} />
                     <Box >
-                      <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video1.pk}  user_name = {userData.recent_video1.user.name} video_name = {userData.recent_video1.name}    view_count = {userData.recent_video1.view_count}  time_difference  = {userData.recent_video1.time_difference} />
+                      <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video1.pk}  user_name = {userData.recent_video1.user.name} video_name = {userData.recent_video1.name}    view_count = {userData.recent_video1.view_count}  time_difference  = {userData.recent_video1.time_difference}  user_pk={userData.recent_video1.pk}/>
                     </Box>
                   </GridItem>
 
@@ -73,7 +73,7 @@ export default  function Feedyou(){
                 
                 <Video src={userData.recent_video2.video} name={userData.recent_video2.name} pk={userData.recent_video2.pk} user = {userData.recent_video2.user} view_count = {userData.recent_video2.view_count} time = {userData.recent_video2.time_difference} size={VideoSize("middle")} />
                 <Box >
-                  <VideoDescription  image = {userData.recent_video2.user.image} pk = {userData.recent_video2.pk}  user_name = {userData.recent_video2.user.name} video_name = {userData.recent_video2.name}    view_count = {userData.recent_video2.view_count}  time_difference  = {userData.recent_video2.time_difference} />
+                  <VideoDescription  image = {userData.recent_video2.user.image} pk = {userData.recent_video2.pk}  user_name = {userData.recent_video2.user.name} video_name = {userData.recent_video2.name}    view_count = {userData.recent_video2.view_count}  time_difference  = {userData.recent_video2.time_difference}  user_pk={userData.recent_video2.pk}/>
                 </Box>
               </GridItem>
 
@@ -81,7 +81,7 @@ export default  function Feedyou(){
                 
                 <Video src={userData.recent_video3.video} name={userData.recent_video3.name} pk={userData.recent_video3.pk} user = {userData.recent_video3.user} view_count = {userData.recent_video3.view_count} time = {userData.recent_video3.time_difference} size={VideoSize("middle")} />
                 <Box >
-                  <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video3.pk}  user_name = {userData.recent_video3.user.name} video_name = {userData.recent_video3.name}    view_count = {userData.recent_video3.view_count}  time_difference  = {userData.recent_video3.time_difference} />
+                  <VideoDescription  image = {userData.recent_video1.user.image} pk = {userData.recent_video3.pk}  user_name = {userData.recent_video3.user.name} video_name = {userData.recent_video3.name}    view_count = {userData.recent_video3.view_count}  time_difference  = {userData.recent_video3.time_difference} user_pk={userData.recent_video3.pk}/>
                 </Box>
               </GridItem>
                 </Grid>
@@ -104,6 +104,7 @@ export default  function Feedyou(){
             <GridItem key = {item.pk.toString()}>
               
               <Video src={item.video} name={item.name} pk={item.pk} user = {item.user} view_count = {item.view_count} time = {item.time_difference} size = {VideoSize("small")} />
+              <VideoDescription image={item?.user.image} pk={item?.pk} user_name={item?.user.name} video_name={item?.name}   view_count={item?.view_count.toString()} time_difference = {item?.time_difference}  user_pk={item?.user.pk}/>
             </GridItem>
             ))}
 

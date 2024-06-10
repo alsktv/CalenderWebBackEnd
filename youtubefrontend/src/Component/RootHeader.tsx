@@ -12,13 +12,28 @@ import Profile from "./ProfileModal";
 import Categories from "./Categories";
 
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function RootHeader(){
   const {colorMode,toggleColorMode} = useColorMode()
   const {isOpen:shareIsOpen , onClose:shareOnClose , onOpen:shareOnOpen} = useDisclosure() 
   const {isOpen:alertIsOpen , onClose:alertOnClose, onOpen:alertOnOpen} = useDisclosure()
   const {isOpen:profileIsOpen , onClose:profileOnClose, onOpen:profileOnOpen} = useDisclosure()
+  const [searchValue , setSearchValue] = useState<string>()
+  const navigate  = useNavigate()
+  
+  const SearchButtonSubmit = () =>{ //search 돋보기를 눌렀을 시 링크 연결
+    if (searchValue !== "") {
+      navigate(`/result?search_query=${searchValue}`)
+      window.location.reload();
+    }
+      
+  }
 
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    setSearchValue(e.target.value)
+  }
 
   return(
    <Box >
@@ -32,10 +47,10 @@ export default function RootHeader(){
       <HStack width={"50%"}> 
       
       <InputGroup >
-        <Input placeholder='검색'  borderRadius='20px 0 0 20px' />
-        <InputRightAddon borderRadius='0 20px 20px 0'> <CiSearch /></InputRightAddon>
+        <Input placeholder='검색'  borderRadius='20px 0 0 20px' value={searchValue} onChange={onChangeSearch} />
+        <InputRightAddon borderRadius='0 20px 20px 0' onClick={SearchButtonSubmit}> <CiSearch /></InputRightAddon>
       </InputGroup>
-      <Button rounded={"50%"}> <FaMicrophone /> </Button>
+      <Button rounded={"50%"} > <FaMicrophone /> </Button>
       </HStack>
       <Box>
       <VideoShareModal isOpen = {shareIsOpen} onClose = {shareOnClose} />

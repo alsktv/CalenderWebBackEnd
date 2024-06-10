@@ -38,7 +38,7 @@ export default function LeftBar(){
 
       <LinkButton link={""} Icon={IoMdHome} text={"home"} />
       <LinkButton link={"shorts/1"} Icon={SiYoutubeshorts} text={"short"} />
-      <LinkButton link={"feed/subscriptions"} Icon={GoVideo} text={"subscribe"} />
+      <LinkButton link={"feed/subscription"} Icon={GoVideo} text={"subscribe"} />
       <LinkButton link={"feed/you"} Icon={MdOutlineVideoLibrary} text={"me"} />
 
     </VStack>

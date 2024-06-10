@@ -1,12 +1,14 @@
 import { Box, HStack, VStack, Text , Image, Button, Heading, Input} from "@chakra-ui/react";
 import Video from "../Component/Video";
 import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getVideos  , getUser, getReviews} from "../api";
 import VideoSize from "../VideoSize";
 import { getVideoDetail } from "../api";
 import {SubscribeButton} from "../Component/SubscribeButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { QueryClient } from "react-query";
+import { putVideoViewCount } from "../api";
 
 interface IVideo {
   pk: Number
@@ -39,12 +41,13 @@ interface IReview  {
 
 export default function VideoDetail(){
   const {videoPk} = useParams()
+  const pk = Number(videoPk)
   const getDetail = () => {     // 이거는 useQuery의 queryFn에 넣기 위한 매개함수임
-    return getVideoDetail(Number(videoPk))
+    return getVideoDetail(pk)
   }
 
    const getVideoReview = () => {
-     return getReviews(Number(videoPk))
+     return getReviews(pk)
    }
 
     const {isLoading:reviewsIsLoading , data:reviewsData} = useQuery({queryKey:["reviews"] , queryFn:getVideoReview})
@@ -61,7 +64,17 @@ export default function VideoDetail(){
     setInputValue(event.target.value)
   }
 
- 
+  const queryClient = useQueryClient()   //view_count put요청을 처리하기 위해 만듬
+
+  const mutation = useMutation(putVideoViewCount,{
+    onSuccess: () => {queryClient.invalidateQueries("videoDetail")}  //링크 접속 시 쿼리 갱신함
+  })
+
+  useEffect(()=>{
+   mutation.mutate(pk)
+   console.log("useEffect")
+  },[pk])
+
   return (
     <Box>
       {videoIsLoading && userIsLoading && reviewsIsLoading? <Text></Text> : 

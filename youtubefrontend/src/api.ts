@@ -112,7 +112,6 @@ interface IPutSubscribeProp {
   for (let i = 0; i < data.length; i++) {
     list.push(data[i])
   }
-  console.log(list,pk)
   
   try{
         const response = await axios.put(`http://127.0.0.1:8000/api/v1/users/${pk}`,{
@@ -153,6 +152,21 @@ export const getReviews = async(pk:Number) => {
    } catch(error) {
     console.log(error)
    }
+}
+
+export const getUserDetail = async(pk:Number) => {
+  try{
+   const response =  await axios.get(`http://127.0.0.1:8000/api/v1/users/${pk}`,{
+     headers:{
+       "Authorization": token,
+     }
+   })
+   return response.data
+
+  } catch(error){
+   console.log(error)
+  }
+
 }
 
 export const putRecentVideos = async(data:Number[]) => {
@@ -201,4 +215,36 @@ export const postLogin = async (user:ILogin) => {
       "token":"wrong"
     }
    }
+}
+
+export const putVideoViewCount = async (pk:number) => {
+  try{
+    const response =  await axios.put(`http://127.0.0.1:8000/api/v1/videos/${pk}`,{
+      view_count: "plus"  //영상이 클릭되면 plus를 보냄 . 후에 django에서 처리해주기
+    },{
+      headers:{
+        "Authorization": token,
+      }
+    })
+    return response.data
+
+   } catch(error){
+    console.log(error)
+   }
+}
+
+export const getSearchVideos = async (query:string) => {
+  try{
+    const response = await axios.get('http://127.0.0.1:8000/api/v1/videos/result', { 
+      params: { search_query: query },
+      headers:{"Authorization": token}
+     
+    })
+    return response.data
+  }catch(error){
+   console.log(error)
+  }
+  
+
+  
 }
