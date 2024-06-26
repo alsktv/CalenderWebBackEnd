@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     "datememo.apps.DatememoConfig",
     "schedulemoduls.apps.SchedulemodulsConfig",
     "totalmemo.apps.TotalmemoConfig",
+
+
+    'strawberry.django',
 ]
 
 MIDDLEWARE = [

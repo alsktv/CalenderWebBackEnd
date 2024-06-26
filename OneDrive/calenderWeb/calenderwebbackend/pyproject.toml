@@ -10,6 +10,8 @@ readme = "README.md"
 python = "^3.12"
 django = "^5.0.6"
 pillow = "^10.3.0"
+strawberry-graphql = {extras = ["debug-server"], version = "^0.235.0"}
+strawberry-graphql-django = "^0.44.2"
 
 
 [build-system]
