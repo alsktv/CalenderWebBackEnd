@@ -12,6 +12,9 @@ django = "^5.0.6"
 pillow = "^10.3.0"
 strawberry-graphql = {extras = ["debug-server"], version = "^0.235.0"}
 strawberry-graphql-django = "^0.44.2"
+graphene = "^3.3"
+graphene-django = "^3.2.2"
+django-cors-headers = "^4.4.0"
 
 
 [build-system]

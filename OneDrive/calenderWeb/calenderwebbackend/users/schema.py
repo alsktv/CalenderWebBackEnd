@@ -4,6 +4,7 @@ from .types import UserType
 from . import quries
 
 
+
 @strawberry.type
 class Query: 
   user: UserType = strawberry.field(resolver= quries.get_user)
