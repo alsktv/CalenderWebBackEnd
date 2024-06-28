@@ -9,3 +9,4 @@ class ScheduleType:
   user: auto
   description : auto
   date: auto
+

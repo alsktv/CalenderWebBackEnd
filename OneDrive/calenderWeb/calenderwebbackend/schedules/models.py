@@ -6,7 +6,7 @@ class Schedule(CommonModel):
   """ 전체 일정이 아닌 하나의 일정 . 에를 들어 하루 전체 일정이 아닌 수영, 독서 등을 따로 저장해놓은 모델. 하루에 여러가지 스케쥴을 가질 수 있음"""
   description= models.CharField(max_length=100 ,default = "")
   user = models.ForeignKey("users.User" , on_delete=models.CASCADE , related_name="schedules")
-  date = models.DateTimeField()
+  date = models.DateTimeField(null=True , blank=True)
   
   def __str__(self):
     return f"{self.user} : {self.description}"
