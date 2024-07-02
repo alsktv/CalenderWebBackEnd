@@ -41,7 +41,7 @@ export default function FAddScheduleModal({isOpen,onClose}:IProp) {
    //사용자가 입력버튼을 눌렀을 시 작동하는 함수
   const onSubmitButton = () => {
     if(description && hours && minutes){
-      mutation.mutate({"description" : description , "date":`${year}-${month}-${day}T${hours}:${minutes}:00+00:00`})
+      mutation.mutate({"description" : description , "date":`${year}-${month}-${day}T${hours}:${minutes}:00+09:00`})
     }
     
   }
@@ -53,7 +53,7 @@ export default function FAddScheduleModal({isOpen,onClose}:IProp) {
          <Text>내용:<Input placeholder="일정 내용 입력" value={description} onChange={onChangeDescription}></Input></Text>
          <Text>시:<Input placeholder="시 입력" value={hours} onChange={onChangeHours}></Input></Text>
          <Text>분:<Input placeholder="분 입력" value={minutes} onChange={onChangeMinutes}></Input></Text>
-         <Button onSubmit={onSubmitButton}>입력</Button>
+         <Button onClick={onSubmitButton}>입력</Button>
        </VStack>
     </ModalContent>
   </Modal>

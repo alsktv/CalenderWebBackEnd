@@ -4,12 +4,24 @@ import NotFound from "./Routers/NotFound"
 import React from 'react';
 import Calendar from "react-calendar";
 import FCalenderDateModal from "./Components/Home/CalenderDateModal";
+import Login from "./Routers/Login";
 
 
 
 const router = createBrowserRouter([
   {
     path:"",
+    element: <Login />,
+    errorElement:  <NotFound />,
+  },
+
+  {
+    path:"login",
+    element: <Login />,
+    errorElement:  <NotFound />,
+  },
+  {
+    path:":userPk",
     element:<Home />,
     errorElement:<NotFound />,
     children:[

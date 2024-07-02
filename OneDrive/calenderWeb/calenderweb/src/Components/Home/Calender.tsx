@@ -9,6 +9,8 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function FCalendar() {
+
+
   const [value, onChange] = useState<Value>(new Date());
   const [ selectData , setSelectData] = useState<Date>()
   const navigate = useNavigate()
@@ -16,7 +18,7 @@ export default function FCalendar() {
 
   const onClickDay = (date:Date) =>{
     setSelectData(date)
-    navigate(`/${date.getFullYear()}/${date.getMonth() +1}/${date.getDate()}`)
+    navigate(`${date.getFullYear()}/${date.getMonth() +1}/${date.getDate()}`)
   }
 
   return (

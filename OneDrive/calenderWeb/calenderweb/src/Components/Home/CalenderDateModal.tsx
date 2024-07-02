@@ -1,6 +1,6 @@
 
 import {  Box, Button, HStack, Text, VStack, useDisclosure  } from "@chakra-ui/react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import FTodayMemo from "./TodayMemo";
 import { APIGetSchedule } from "../../api";
 import { useMutation, useQuery } from "react-query";
@@ -24,20 +24,20 @@ interface  IScheduleData{
 
 export default function FCalenderDateModal(){
 
-  let { year , month , day } = useParams();
+  let { year , month , day , userPk } = useParams();
   const [schedules , setSchedules] = useState<IMySchedule[]>()
   const [hours , setHours] = useState()
   const [minutes , setMinutes] = useState()
   const currentDate = new Date()
 
+  const navigation = useNavigate()
+
 
   const mutation = useMutation(APIGetSchedule , {
     onSuccess: (data) =>{
-
       //유저가 선택 한 날짜의 일정만 가져오게 만듬
       const dateSchedule = data.data.user.mySchedule.filter(
         (item:IMySchedule) =>{
-          console.log(item.date)
           const itemDate = new Date(item.date)
           return (
                    itemDate.getDate() === Number(day)
@@ -48,15 +48,17 @@ export default function FCalenderDateModal(){
           
 
     )
+      console.log(dateSchedule)
        setSchedules(dateSchedule)
     }
   })
 
   useEffect(()=>{
-    mutation.mutate(1)
+    mutation.mutate(Number(userPk))
   },[year,month,day])
 
   const formatDate = (dateString:Date) => {
+     console.log(dateString)
      const date = new Date(dateString);
      const hour = date.getHours()
      const minutes = String(date.getMinutes()).padStart(2, '0');
