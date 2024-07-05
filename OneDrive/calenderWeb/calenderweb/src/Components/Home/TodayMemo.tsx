@@ -1,4 +1,4 @@
-import { Heading, Modal, ModalContent , Text ,Image , Button, Divider } from "@chakra-ui/react";
+import { Modal, ModalContent , Text  , Button } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
 interface IProp {

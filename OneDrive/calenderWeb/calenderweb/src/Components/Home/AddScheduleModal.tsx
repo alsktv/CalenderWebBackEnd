@@ -4,20 +4,28 @@ import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { APIPostSchedule } from "../../api";
 import { useParams } from "react-router-dom";
 
+interface IMySchedule {
+  pk: number , 
+  description: string,
+  date: Date,
+  isChecked: boolean,
+}
+
 interface IProp {
   isOpen:boolean
   onClose: () => void
+  onClickButton : (data:IMySchedule[]) => void
 }
 
-export default function FAddScheduleModal({isOpen,onClose}:IProp) {
+export default function FAddScheduleModal({isOpen,onClose,onClickButton}:IProp) {
 
   const {year,month,day } = useParams()
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation(APIPostSchedule,{
-    onSuccess:()=>{
-       queryClient.invalidateQueries('schedules');
+    onSuccess:(data)=>{
+      onClickButton(data)
     }
   })
 
@@ -25,6 +33,7 @@ export default function FAddScheduleModal({isOpen,onClose}:IProp) {
   const [description , setDescription] = useState<string>() 
   const [hours , setHours] = useState<string>()
   const [minutes , setMinutes] = useState<string>()
+
   
   //onChange를 처리하기 위해 만든 함수들
   const onChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +48,14 @@ export default function FAddScheduleModal({isOpen,onClose}:IProp) {
   }
 
    //사용자가 입력버튼을 눌렀을 시 작동하는 함수
-  const onSubmitButton = () => {
-    if(description && hours && minutes){
-      mutation.mutate({"description" : description , "date":`${year}-${month}-${day}T${hours}:${minutes}:00+09:00`})
+  const onClickInputButton = () => {
+    if(description && hours && minutes ){
+      if(typeof description === "string" && typeof Number(hours) === "number" && typeof Number(minutes) === "number" ){
+        if(Number(hours) < 24 && Number(hours) >= 0 && Number(minutes) < 60 && Number(minutes) >= 0){
+          mutation.mutate({"description" : description , "date":`${year}-${month}-${day}T${hours}:${minutes}:00+09:00`})
+        }
+      }
+
     }
     
   }
@@ -53,7 +67,7 @@ export default function FAddScheduleModal({isOpen,onClose}:IProp) {
          <Text>내용:<Input placeholder="일정 내용 입력" value={description} onChange={onChangeDescription}></Input></Text>
          <Text>시:<Input placeholder="시 입력" value={hours} onChange={onChangeHours}></Input></Text>
          <Text>분:<Input placeholder="분 입력" value={minutes} onChange={onChangeMinutes}></Input></Text>
-         <Button onClick={onSubmitButton}>입력</Button>
+         <Button onClick={onClickInputButton}>입력</Button>
        </VStack>
     </ModalContent>
   </Modal>

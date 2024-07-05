@@ -1,5 +1,10 @@
 import axios from "axios"
 
+interface IPostSchedule{
+  description:string
+  date:string
+}
+
 export const  APIGetSchedule = async (pk:number) =>  {
    try{
 
@@ -9,6 +14,8 @@ export const  APIGetSchedule = async (pk:number) =>  {
         mySchedule {
           description
           date
+          isChecked
+          pk
                        }
       }
     }
@@ -30,23 +37,15 @@ export const  APIGetSchedule = async (pk:number) =>  {
    }
 }
 
-interface IPostSchedule{
-  description:string
-  date:string
-}
-
 export const APIPostSchedule = async ({description,date}:IPostSchedule) => {
   try{
     const mutation = `
     mutation{
-           postSchedule(description: "${description}"  , user:1 , date: "${date}"){
+           postSchedule(description: "${description}"  , user:1 , date: "${date}" ){
             description
             pk
            }
   }`
-
-
-
       const response = await axios.post("http://127.0.0.1:8000/graphql",   {
       query: mutation,
     },
@@ -60,6 +59,46 @@ export const APIPostSchedule = async ({description,date}:IPostSchedule) => {
   }catch(error){
       console.log(error)
 
+  }
+}
+//체크박스를 클릭시 put요청 보내는 함수
+export const APIPutScheduleIschecked = async(pk:number) =>{
+   try{
+    const mutation = `
+    mutation{
+    putScheduleischecked(pk:${pk}){
+    pk
+    isChecked
+  }
+    }
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query:mutation
+    })
+    return response.data
+   }catch(error){
+    console.log(error)
+   }
+   
+}
+export const APIDeleteSchedule = async (pk:number) => {
+  try{
+    const mutation = `
+    mutation{
+    deleteSchedule(pk:${pk}){
+    status
+    }
+    }
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",
+      {
+        query:mutation
+      }
+    )
+
+    return response.data
+  } catch(error){
+    console.log(error)
   }
 }
 
