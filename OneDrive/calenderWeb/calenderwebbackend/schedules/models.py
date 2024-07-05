@@ -7,6 +7,7 @@ class Schedule(CommonModel):
   description= models.CharField(max_length=100 ,default = "")
   user = models.ForeignKey("users.User" , on_delete=models.CASCADE , related_name="schedules")
   date = models.DateTimeField(null=True , blank=True)
+  is_checked = models.BooleanField(default=False)
   
   def __str__(self):
     return f"{self.user} : {self.description}"

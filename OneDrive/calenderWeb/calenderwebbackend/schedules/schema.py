@@ -1,11 +1,9 @@
 import strawberry
 import typing
-from .types import ScheduleType
+from .types import ScheduleType, StatusType
 from . import quries
 from . import mutations
-from .models import Schedule
-from users.types import UserType
-from users.models import User
+
 
 
 @strawberry.type
@@ -16,11 +14,9 @@ class Query:
 @strawberry.type
 class Mutation:
 
- # post_schedule: ScheduleType = strawberry.field(resolver=mutations.add_schedule)
+  post_schedule: ScheduleType = strawberry.field(resolver=mutations.add_schedule)
+
+  delete_schedule: StatusType  = strawberry.field(resolver=mutations.delete_schedule)
+
+  put_scheduleIsChecked : ScheduleType = strawberry.field(resolver=mutations.put_schedule_isChecked)
   
-  
-  @strawberry.mutation
-  def post_schedule(self, description: str , user:int ,date:str) -> ScheduleType:
-    pk = Schedule.objects.all().count() + 1
-    Schedule.objects.create(pk =pk , description= description , user=User.objects.get(pk = user) , date=date )
-    return ScheduleType(pk = pk ,  description= description , user=User.objects.get(pk = user), date =date)

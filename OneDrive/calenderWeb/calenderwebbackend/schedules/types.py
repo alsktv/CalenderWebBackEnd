@@ -9,4 +9,9 @@ class ScheduleType:
   user: auto
   description : auto
   date: auto
+  is_checked: auto
+
+@strawberry.type
+class StatusType:
+  status: str
 
