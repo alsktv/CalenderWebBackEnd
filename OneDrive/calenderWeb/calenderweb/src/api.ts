@@ -102,6 +102,101 @@ export const APIDeleteSchedule = async (pk:number) => {
   }
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+// 로그인 한 유저가 가지고 있는 모든 날짜의 메모를 가져오는 함수
+export const APIGetUserMemo = async (pk:number) =>{
+   try{
+
+    const query = `
+    query  {
+    dateUserMemos(pk: ${pk}) {
+         description
+          date
+          pk
+    
+    }
+    }
+
+  `;
+
+
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query:query,
+    })
+    return response.data
+   }catch(error){
+    console.log(error)
+   }
+}
+
+//로그인 한 유저가 가지고 있는 메모를 추가하는 함수
+export const APIPostUserMemo = async ({pk,date,description}:IUserMemo) => {
+  try{
+    const mutation = `
+    mutation{
+           postUserMemo(description: "${description}"  , pk:${pk} , date: "${date}" ){
+           date
+            description
+            pk
+           }
+  }`
+      const response = await axios.post("http://127.0.0.1:8000/graphql",   {
+      query: mutation,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      } }
+    ) 
+    console.log(response.data)
+    return response.data
+  }catch(error){
+      console.log(error)
+
+  }
+}
+
+interface IUserMemo {
+  pk:number
+  date: string
+  description:string
+}
+
+// 로그인 한 유저가 가지고 있는 메모를 수정하는 함수
+export const APIPutUserMemo = async ({pk,date,description}:IUserMemo) => {
+  try{
+
+    const query = `
+    query  {
+    dateUserMemos(pk: ${pk} , date:${date} , description:${description}) {
+         description
+          date
+          pk
+    
+    }
+    }
+
+  `;
+
+
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query:query,
+    })
+    return response.data
+   }catch(error){
+    console.log(error)
+   }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 interface IPropJwtLogin{
   username:string,
   password:string,

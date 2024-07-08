@@ -32,6 +32,13 @@ export default function FCalenderDateModal(){
   //1.3-> checkbox를 제에하기 위해 필요한 리스트. 불리안 값을 가진 리스트를 저장한다. 백엔드에서is_checked값 정보 가져와서 저장한다.
   const [isChecked, setIsChecked] = useState(new Array(schedules?.length).fill(false));
 
+  //1.4-> 월요일, 화요일 등의 요일을 저장하는 변수
+  const [dayOfWeek, setDayOfWeek] = useState('');
+
+  //1.5 -> 요일 리스트
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+
 
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -72,6 +79,13 @@ export default function FCalenderDateModal(){
     //리스트에 집어넣음으로써 체크박스에 반영되게 만듬.
     setIsChecked(list)
   }
+
+  //3.3 -> 날짜를 바탕으로 요일을 가져오는 함수.
+  const decideDate = () => {
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+    const dayIndex = date.getDay();
+    setDayOfWeek(daysOfWeek[dayIndex]);
+  };
   
 
 
@@ -136,8 +150,9 @@ export default function FCalenderDateModal(){
 
 
   //5.1-> checkbox값이 바꿨을 때 실행되는 함수
-  const onChangeCheckbox = (index:number) => {
+  const onChangeCheckbox = (index:number,pk:number) => {
     //react useState값을 바꿀때는 ...(spread) 연산자를 이용하여 값을 복사한 뒤 바꾸어 줘야함. 그냥 원본을 바꾸면 랜더링이 되지 않음
+    putIsCheckedMutation.mutate(pk)
     const newCheckedItems = [...isChecked]
     newCheckedItems[index] = !newCheckedItems[index];
     setIsChecked(newCheckedItems);
@@ -155,11 +170,6 @@ export default function FCalenderDateModal(){
   deleteMutation.mutate(pk)
   }
 
-  //5.4-> 체크박스 눌렀을 시 실행되는 함수. put요청을 보낸다.
-  const onclickCheckBox = (pk:number) =>{
-    putIsCheckedMutation.mutate(pk)
-  }
-
 
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -171,6 +181,7 @@ export default function FCalenderDateModal(){
   //6.1-> url의 값이 바뀔때마다 날짜에 맞는 일정을 가져오기 위해 뮤테이션 실행함
   useEffect(()=>{
   mutation.mutate(Number(userPk))
+  decideDate()
     },[year,month,day])
 
 
@@ -182,18 +193,15 @@ export default function FCalenderDateModal(){
      <Box maxW='sm' borderWidth='3px' borderRadius='lg' overflow='hidden' w={250}>
 
           <VStack align="start">
-            <Text> {year } /  {month} / {day} </Text>
+            <Text> {year } /  {month} / {day} ({dayOfWeek})  </Text>
 
             {schedules ?
              schedules.map((item,index)=>(
               <HStack>
                 {/* onChange에 인수 넣어줄려면 익명함수 사용하기 */}
-                <Checkbox isChecked={isChecked[index]} onChange={
-                  () =>{
-                    onChangeCheckbox(index)
-                  }
-                }  onClick={()=>{
-                  onclickCheckBox(item?.pk)
+                <Checkbox isChecked={isChecked[index]} 
+                 onChange={()=>{
+                  onChangeCheckbox(index,item?.pk)
                 }}/>
                 <Text> {item.description}</Text>
                 <Text color={"red"}> 시간: {formatDate(item.date)}</Text>
