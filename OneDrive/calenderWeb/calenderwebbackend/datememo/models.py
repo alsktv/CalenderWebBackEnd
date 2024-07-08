@@ -5,7 +5,7 @@ from commonmodel.models import CommonModel
 class DateMemo(CommonModel):
   """ 특정 날짜의 메모 """
   description= models.TextField(max_length=100 ,default = "")
-  user = models.ForeignKey("users.User" , on_delete=models.CASCADE)
+  user = models.ForeignKey("users.User" , on_delete=models.CASCADE , related_name="dateMemos")
   date = models.DateField()
   
   def __str__(self):
