@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { APIGetUserMemo } from "../../api";
 import { useEffect, useState } from "react";
 import AddTodayMemo from "./AddTodayMemo";
+import PutTodayMemo from "./PutTodayMemo";
 
 interface IProp {
   isOpen:boolean
@@ -39,6 +40,8 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
   //2.1 -> 메모추가 버튼 눌렀을 시 시행되는 모달창에 필요한 변수들
   const {isOpen:addMemoIsOpen , onClose:addMemoOnClose , onOpen:addMemoOnOpen} =useDisclosure()
 
+    //2.2 -> 메모수정 버튼 눌렀을 시 시행되는 모달창에 필요한 변수들
+    const {isOpen:putMemoIsOpen , onClose:putMemoOnClose , onOpen:putMemoOnOpen} =useDisclosure()
 
   ////////////////////////////////////////////////////////////////////////////
   //3. 프로그램에 필요한 함수들
@@ -46,6 +49,7 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
 
 // 3.1 -> 특정 날짜의 메모가 있는지를 확인하는 함수
   const IsTodaymemos = () => {
+    console.log(todayMemo)
     if(todayMemo?.length !== 0){
       return true
     }else{
@@ -87,7 +91,8 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
          ?
          <VStack>
          {todayMemo ? <Text>{todayMemo[0]?.description}</Text> :null}
-         <Button w={"20%"}> 메모 수정</Button>
+         <Button w={"20%"} onClick={putMemoOnOpen}> 메모 수정</Button>
+         <PutTodayMemo isOpen = {putMemoIsOpen} onClose={putMemoOnClose}/>
          </VStack>
          :
          <Box>

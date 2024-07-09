@@ -168,25 +168,27 @@ interface IUserMemo {
 }
 
 // 로그인 한 유저가 가지고 있는 메모를 수정하는 함수
-export const APIPutUserMemo = async ({pk,date,description}:IUserMemo) => {
+export const APIPutUserMemo = async ({pk,date, description}:IUserMemo) => {
   try{
 
-    const query = `
-    query  {
-    dateUserMemos(pk: ${pk} , date:${date} , description:${description}) {
-         description
-          date
-          pk
-    
+    const mutation = `
+    mutation{
+    putUserMemo(pk:${pk} , date:"${date}" , description:"${description}"){
+    pk
+    date
+  }
     }
-    }
-
-  `;
+    `
 
 
     const response = await axios.post("http://127.0.0.1:8000/graphql",{
-      query:query,
-    })
+      query : mutation,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      } })
+    console.log(response.data , pk , description ,date)
     return response.data
    }catch(error){
     console.log(error)
