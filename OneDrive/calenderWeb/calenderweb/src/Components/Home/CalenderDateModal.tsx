@@ -86,6 +86,12 @@ export default function FCalenderDateModal(){
     const dayIndex = date.getDay();
     setDayOfWeek(daysOfWeek[dayIndex]);
   };
+
+    //3.4-> 일정을 바로 업데이트하기 위해 자식 컴포넌트에게 보내는 함수.
+    const subOnClickButton = (data:IMySchedule[]) => {
+      scheduleOnClose()
+      mutation.mutate(Number(userPk))  //put처리된 값을 새롭개 가져오기 위해서 mutation실행해줌.
+    } 
   
 
 
@@ -158,11 +164,7 @@ export default function FCalenderDateModal(){
     setIsChecked(newCheckedItems);
   };
 
-  //5.2-> 일정을 바로 업데이트하기 위해 자식 컴포넌트에게 보내는 함수.
-  const onClickButton = (data:IMySchedule[]) => {
-    scheduleOnClose()
-    mutation.mutate(Number(userPk))  //put처리된 값을 새롭개 가져오기 위해서 mutation실행해줌.
-  }
+
 
 
   //5.3->  삭제 버튼 눌렀을 시 작동하는 함수. 백앤드에 delete요청을 보낸다.
@@ -214,7 +216,7 @@ export default function FCalenderDateModal(){
              : <Text>일정이 없습니다.</Text>
             }
             <Button onClick={scheduleOnOpen}> 일정 추가 </Button>
-            <FAddScheduleModal isOpen={scheduleIsOpen} onClose={scheduleOnClose} onClickButton = {onClickButton}/>
+            <FAddScheduleModal isOpen={scheduleIsOpen} onClose={scheduleOnClose} onClickButton = {subOnClickButton}/>
             <Button onClick={memoOnOpen}> 메모장 열기 </Button>
             <FTodayMemo isOpen={memoIsOpen} onClose={memoOnClose}/>
           </VStack>

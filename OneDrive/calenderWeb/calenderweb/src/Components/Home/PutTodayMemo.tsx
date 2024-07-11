@@ -7,6 +7,7 @@ import {  APIPutUserMemo ,APIGetUserMemo } from "../../api";
 interface IProp {
   isOpen:boolean
   onClose: () => void
+  subOnChange: () => void
 }
 
 interface IUserMemo {
@@ -16,7 +17,7 @@ interface IUserMemo {
 }
 
 
-export default function PutTodayMemo ({isOpen , onClose }:IProp) {
+export default function PutTodayMemo ({isOpen , onClose , subOnChange }:IProp) {
   /////////////////////////////////////////////////////////////////////////////
   //1.프로그램에 필요한 변수들 저장
   /////////////////////////////////////////////////////////////////////////////
@@ -37,8 +38,9 @@ export default function PutTodayMemo ({isOpen , onClose }:IProp) {
 
   //2.1 -> put요청 처리하는 뮤테이션 변수
    const PutTodayMemoMutation = useMutation(APIPutUserMemo,{
-    onSuccess:(data)=>{
-      console.log(data)
+    onSuccess:()=>{
+      onClose()
+      subOnChange()
     }
    })
 
@@ -70,10 +72,11 @@ export default function PutTodayMemo ({isOpen , onClose }:IProp) {
   const onClickPutButton = () =>{
     if(writeMemo){
       PutTodayMemoMutation.mutate({pk:Number(userPk) , description: writeMemo[0].description, date:String(writeMemo[0].date)})
+      
     } else{
       alert("you didn't write memo")
     }
- 
+    
   }
 
 

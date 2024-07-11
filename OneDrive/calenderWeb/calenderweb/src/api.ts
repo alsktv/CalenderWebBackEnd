@@ -197,7 +197,88 @@ export const APIPutUserMemo = async ({pk,date, description}:IUserMemo) => {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+//totalMemo 에 관한 함수들
 ///////////////////////////////////////////////////////////////////////////////
+
+
+export const APIGetTotalMemo = async (pk:number) => {
+   try{
+    const query = 
+    `query{
+    totalMemo(pk:${pk}){
+  description
+}
+    }
+
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",
+      {
+        query:query
+      }
+    )
+    return response.data
+   }catch(error){
+    console.log("APIGetTotalMemoError:",error)
+   }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//scheduleModule 에 관한 함수들
+///////////////////////////////////////////////////////////////////////////////
+
+
+export const APIGetScheduleModule = async (pk:number) => {
+  try{
+    const query = 
+    `query{
+scheduleModules{
+  description
+  pk
+}
+}
+
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",
+      {
+        query:query
+      }
+    )
+
+    return response.data
+  }catch(error){
+   console.log("APIGetScheduleModule:", error)
+  }
+}
+
+interface IPostModule {
+  pk:number
+  description:string
+}
+
+export const APIPostScheduleModule = async ({pk,description}:IPostModule) => {
+  try{
+    const mutation = `
+    mutation{
+    postScheduleModule(pk:${pk},description:"${description}"){
+    pk
+    description
+    }
+    }
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query:mutation
+    })
+    return response.data
+  }catch(error){
+    console.log("APIPostScheduleModuleError:",error)
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 interface IPropJwtLogin{
   username:string,

@@ -49,12 +49,16 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
 
 // 3.1 -> 특정 날짜의 메모가 있는지를 확인하는 함수
   const IsTodaymemos = () => {
-    console.log(todayMemo)
     if(todayMemo?.length !== 0){
       return true
     }else{
       return false
     }
+  }
+
+  //3.2 -> 메모를 수정시 수정사항이 바로 적용될 수 있게 상태를 바꾸는 함수.
+  const subOnChange = () => {
+    mutation.mutate(Number(userPk))
   }
 
   
@@ -92,7 +96,7 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
          <VStack>
          {todayMemo ? <Text>{todayMemo[0]?.description}</Text> :null}
          <Button w={"20%"} onClick={putMemoOnOpen}> 메모 수정</Button>
-         <PutTodayMemo isOpen = {putMemoIsOpen} onClose={putMemoOnClose}/>
+         <PutTodayMemo isOpen = {putMemoIsOpen} onClose={putMemoOnClose} subOnChange = {subOnChange}/>
          </VStack>
          :
          <Box>
