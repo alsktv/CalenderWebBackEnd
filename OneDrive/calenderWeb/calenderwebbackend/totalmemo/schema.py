@@ -6,5 +6,5 @@ from . import quries
 
 @strawberry.type
 class Query: 
-  totalmemo: TotalMemoType = strawberry.field(resolver= quries.get_totalMemo)
+  totalMemo: TotalMemoType = strawberry.field(resolver= quries.get_totalMemo)
   totalMemos : typing.List[TotalMemoType] = strawberry.field(resolver = quries.get_totalMemos)

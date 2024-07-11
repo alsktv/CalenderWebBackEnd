@@ -14,7 +14,7 @@ class Query(users_schema.Query, schedules_schema.Query , scheduleModule_schema.Q
 
 
 @strawberry.type
-class Mutation(schedules_schema.Mutation , datememo_schema.Mutation):
+class Mutation(schedules_schema.Mutation , datememo_schema.Mutation, scheduleModule_schema.Mutation):
    pass
 
 
