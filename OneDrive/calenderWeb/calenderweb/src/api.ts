@@ -222,6 +222,35 @@ export const APIGetTotalMemo = async (pk:number) => {
    }
 }
 
+interface ITotalMemo {
+  pk:number
+  description: string
+}
+
+export const APIPutTotalMemo = async ({pk, description}:ITotalMemo) => {
+  try{
+
+    const mutation = `
+    mutation{
+    putTotalmemo(pk:${pk}  , description:"${description}"){
+    pk
+    description
+  }
+    }
+    `
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query : mutation,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      } })
+    return response.data
+   }catch(error){
+    console.log("APIPutTotalMemoError:" , error)
+   }
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,9 +305,78 @@ export const APIPostScheduleModule = async ({pk,description}:IPostModule) => {
   }
 }
 
+export const APIDeleteScheduleModule = async(pk:number) => {
+  try{
+    const  mutation = `
+mutation{
+  deleteScheduleModule(pk:${pk}){
+    status
+  }
+}
+    `
+
+    const response = await axios.post("http://127.0.0.1:8000/graphql",{
+      query:mutation
+    })
+    return response.data
+  }catch(error){
+    console.log("APIDeleteScheduleModuleError:" , error)
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
+//delaySchedule에 관한 함수들
 ////////////////////////////////////////////////////////////////////////////////
+
+
+export const APIGetDelaySchedules = async (userpk:number) => {
+    try{
+      const query = 
+      `query{
+
+  delaySchedules(pk:${userpk}){
+    pk
+    description
+    date
+  }
+  }
+      `
+      const response = await axios.post("http://127.0.0.1:8000/graphql",
+        {
+          query:query
+        }
+      )
+  
+      return response.data
+    }catch(error){
+     console.log("APIGetDelaySchedulesError:", error)
+    }
+  }
+  
+
+export const APIDeleteDelaySchedule = async(pk:number) => {
+    try{
+      const  mutation = `
+mutation{
+  deleteDelayschedule(pk:${pk}){
+    status
+  }
+}
+      `
+      const response = await axios.post("http://127.0.0.1:8000/graphql",{
+        query:mutation
+      })
+      return response.data
+    }catch(error){
+      console.log("APIDeleteDelayScheduleError", error)
+    }
+  }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 interface IPropJwtLogin{
   username:string,

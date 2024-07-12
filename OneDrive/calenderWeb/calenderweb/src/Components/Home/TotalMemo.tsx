@@ -1,8 +1,9 @@
-import {  Box, Text,  } from "@chakra-ui/react";
+import {  Box, Button, Text, useDisclosure,  } from "@chakra-ui/react";
 import { useMutation } from "react-query";
 import { APIGetTotalMemo } from "../../api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PutTotalMemo from "./PutTotalMemo";
 
 //전체 메모를 보여주는 컴포넌트
 export default function FTotalMemo(){
@@ -25,6 +26,10 @@ export default function FTotalMemo(){
   ///////////////////////////////////////////////////////////////////////////////
 
 
+  const subOnChange = () => {
+    getTotalMemoMutation.mutate(Number(userPk))
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////////
   //3.뮤테이션 함수들
@@ -44,7 +49,14 @@ export default function FTotalMemo(){
   ///////////////////////////////////////////////////////////////////////////////
   //4. useEffect함수들
   ///////////////////////////////////////////////////////////////////////////////
-  
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+  //5. 모달창에 필요한 변수들
+  ///////////////////////////////////////////////////////////////////////////////
+
+  const {isOpen:PutTotalMemoIsOpen , onClose:PutTotalMemoOnClose , onOpen:PutTotalMemoOnOpen} =useDisclosure()
 
 //4.1 -> getMutation을 시행하는 함수
   useEffect(()=>{
@@ -55,6 +67,8 @@ export default function FTotalMemo(){
   return(
      <Box maxW='sm' borderWidth='3px' borderRadius='lg' overflow='hidden' w={250}>
        <Text> {totalMemo}</Text>
+       <Button onClick={PutTotalMemoOnOpen}> 수정</Button>
+       <PutTotalMemo isOpen={PutTotalMemoIsOpen} onClose={PutTotalMemoOnClose} subOnChange={subOnChange}/>
      </Box>
   )
 }

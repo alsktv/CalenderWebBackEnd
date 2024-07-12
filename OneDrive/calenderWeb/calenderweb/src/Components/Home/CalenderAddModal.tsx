@@ -2,7 +2,7 @@ import {  Box, Button, HStack, Modal, ModalContent , Text, useDisclosure, VStack
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { useParams } from "react-router-dom";
-import { APIGetSchedule, APIGetScheduleModule } from "../../api";
+import { APIDeleteScheduleModule, APIGetSchedule, APIGetScheduleModule } from "../../api";
 import FAddScheduleByModule from "./AddScheduleByModuleModal";
 import FAddModuleModal from "./AddModule";
 
@@ -37,6 +37,8 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
   //1.3 -> 모달창에 보낼 description을 저장하는 변수
   const [Itemdescription,setItemDescription] = useState("")
 
+  const [status, setStatus] = useState("")
+
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -58,17 +60,26 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
     }
   })
 
+  //2.3 -> 스케쥴 모델을 삭제하는 뮤테이션 함수
+  const deleteScheduleModule = useMutation(APIDeleteScheduleModule,{
+   onSuccess:(data) => {
+    if(data.data.deleteScheduleModule.status === "ok"){
+       getModuleMutation.mutate(Number(userPk))
+    }
+   }
+  })
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // 프로그램에 필요한 함수들
   ///////////////////////////////////////////////////////////////////////////////
 
   //모달창 컴포넌트에 보낼때 사용하는 함수. 이것으로 인해 변경된 값을 즉시 화면에 나타낼 수 있음
-  const onClickButton = () => {
+  const subonClickButton = () => {
     getScheduleMutation.mutate(Number(userPk))
   }
 
-  const onClickAddButton = () => {
+  const subonClickAddButton = () => {
     getModuleMutation.mutate(Number(userPk))
   }
 
@@ -78,11 +89,21 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
   ///////////////////////////////////////////////////////////////////////////
   //3.이벤트 핸들러 함수들
   ///////////////////////////////////////////////////////////////////////////
-  const onClick = (index:number, description:string) => {
+
+
+  //3.1 ->  모델을 나타내는 모달창에서 +버튼 누를 시 동작하는 함수
+  const onClickAddButton = (index:number, description:string) => {
    plusonOpen()
    setItemDescription(description)
    console.log(index, description)
   }
+
+    //3.2 ->  모델을 나타내는 모달창에서 X버튼 누를 시 동작하는 함수
+    const onClickDeleteButton = (pk:number) => {
+      deleteScheduleModule.mutate(pk)
+     }
+
+
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -113,16 +134,17 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
           {module ?   module?.map((item:IModule,index)=>(
           <Box key={item.pk}>
             <HStack>
+              <Button onClick={() => {onClickDeleteButton(item.pk)}}>X</Button>
               <Text>{item.description}</Text>
-              <Button onClick={()=>{onClick(index , item.description)}}>+</Button>
-              <FAddScheduleByModule isOpen={plusIsOpen} onClose={plusonClose} description = {Itemdescription} onClickButton={onClickButton}/>
+              <Button onClick={()=>{onClickAddButton(index , item.description)}}>+</Button>
+              <FAddScheduleByModule isOpen={plusIsOpen} onClose={plusonClose} description = {Itemdescription} onClickButton={subonClickButton}/>
             </HStack>
           </Box>
          )): null}
    
         </VStack>
          <Button onClick={addonOpen}>모듈 추가</Button>
-         <FAddModuleModal isOpen={addIsOpen} onClose={addonClose} onClickButton={onClickAddButton}/>
+         <FAddModuleModal isOpen={addIsOpen} onClose={addonClose} onClickButton={subonClickAddButton}/>
       </ModalContent>
     </Modal>
   )
