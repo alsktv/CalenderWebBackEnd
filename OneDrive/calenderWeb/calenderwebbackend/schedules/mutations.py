@@ -37,6 +37,17 @@ def delete_schedule(pk:int):
         #NotFound는 값을 찾을 수 없을 때, ParseError는 입력 형식이 잘못되었을 때 사용함. 둘다 함수이기에 안에 메세지를 넣을 수 있음
         raise NotFound(detail=f"Schedule with pk {pk} does not exist.")
     
+def delete_delay_schedule(pk:int):
+    try:
+        schedule = Schedule.objects.get(pk = pk)
+        schedule.delete()
+        return StatusType(status="ok")
+    except ObjectDoesNotExist:
+        raise NotFound(detail=f"Schedule with pk {pk} does not exist.")
+    except ParseError:
+        raise ParseError("pk must int")
+
+    
 
     
 

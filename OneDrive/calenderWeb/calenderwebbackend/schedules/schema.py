@@ -10,6 +10,7 @@ from . import mutations
 class Query: 
   schedule: ScheduleType = strawberry.field(resolver= quries.get_schedule)
   schedules : typing.List[ScheduleType] = strawberry.field(resolver = quries.get_schedules)
+  delaySchedules :  typing.List[ScheduleType] = strawberry.field(resolver = quries.get_delay_schedules)
 
 @strawberry.type
 class Mutation:
@@ -19,4 +20,6 @@ class Mutation:
   delete_schedule: StatusType  = strawberry.field(resolver=mutations.delete_schedule)
 
   put_scheduleIsChecked : ScheduleType = strawberry.field(resolver=mutations.put_schedule_isChecked)
+
+  delete_delay_schedule :StatusType  = strawberry.field(resolver=mutations.delete_delay_schedule)
   
