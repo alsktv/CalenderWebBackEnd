@@ -1,7 +1,7 @@
 import { Box, Button, Input, Text, VStack } from "@chakra-ui/react";
 import { useMutation } from "react-query";
 import { APIJwtLogin } from "../api";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import jwt from "jsonwebtoken"
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -55,11 +55,46 @@ export default function Login(){
     }
      
   }
+
+
+  //keydown에 관한 함수들
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement> , index:number) => {
+    
+    if(event.key === "Enter"){
+      event.preventDefault()
+      onClickButton()
+    }else if(event.key === "ArrowUp"){
+      console.log("work")
+      const newIndex = index === 0 ?1 : 0
+      inputRefs.current[newIndex].focus()
+    }else if(event.key === "ArrowDown"){
+      const newIndex = index === 1 ?0 : 1
+      inputRefs.current[newIndex].focus()
+    }
+  }
+
+  //useRef변수들
+
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+  
+
+
+  //Input에 들어가는 정보를 저장한 리스트
+  const itemList = [{text:"username" , value:username , function:onChangeUsername},{text:"password" , value:password , function:onChangePassword}]
+
+
   return (
      <Box w={"30%"}>
       <VStack>
-        <Input placeholder="username" required value={username} onChange={onChangeUsername}></Input>
-        <Input placeholder="password" required value={password} onChange={onChangePassword}></Input>
+      {itemList.map((item , index) => (
+        <Input placeholder={item.text}
+         required value={item.value} 
+         onChange={item.function} 
+         onKeyDown={(event) => {handleKeyDown(event,index)}} 
+         ref={(el) => {if(el){
+          (inputRefs.current[index] = el)
+        }}} ></Input>
+      ))}
         <Button  onClick={onClickButton}> 로그인 </Button>
       </VStack>
      </Box>

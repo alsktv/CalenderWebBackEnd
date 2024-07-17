@@ -31,6 +31,21 @@ export default function PutTodayMemo ({isOpen , onClose , subOnChange }:IProp) {
 
 
 
+    /////////////////////////////////////////////////////////////////////////////
+  //프로그램에 필요한 함수들 저장
+  /////////////////////////////////////////////////////////////////////////////
+
+
+   //1. keydown에 필요한 함수
+   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      onClickPutButton();
+    }
+  };
+
+
   /////////////////////////////////////////////////////////////////////////////
   //2.뮤테이션 변수들
   /////////////////////////////////////////////////////////////////////////////
@@ -48,7 +63,7 @@ export default function PutTodayMemo ({isOpen , onClose , subOnChange }:IProp) {
      const mutation = useMutation(APIGetUserMemo,{
       onSuccess:(data)=>{
         const userMemos: IUserMemo[] = data.data.dateUserMemos
-        const newMemos = userMemos.filter(item =>item.date === `${year}-${month?.padStart(2, '0')}-${day}` )
+        const newMemos = userMemos.filter(item =>item.date === `${year}-${month?.padStart(2, '0')}-${day?.padStart(2, '0')}` )
         setWriteMemo(newMemos)
       }
     })
@@ -90,7 +105,7 @@ export default function PutTodayMemo ({isOpen , onClose , subOnChange }:IProp) {
   return(
     <Modal isOpen = {isOpen} onClose={onClose}>
       <ModalContent left={200}>
-        <VStack>
+        <VStack onKeyDown={handleKeyDown}>
           <Text>{year}/{month}/{day}</Text>
           {writeMemo ?      <Text>메모:<Textarea value={writeMemo[0].description} onChange={onChangeMemo}/></Text> :null}
           <Button onClick={onClickPutButton}> 입력</Button>

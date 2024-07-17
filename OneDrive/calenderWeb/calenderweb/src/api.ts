@@ -179,8 +179,6 @@ export const APIPutUserMemo = async ({pk,date, description}:IUserMemo) => {
   }
     }
     `
-
-
     const response = await axios.post("http://127.0.0.1:8000/graphql",{
       query : mutation,
     },
@@ -188,7 +186,6 @@ export const APIPutUserMemo = async ({pk,date, description}:IUserMemo) => {
       headers: {
         'Content-Type': 'application/json',
       } })
-    console.log(response.data , pk , description ,date)
     return response.data
    }catch(error){
     console.log(error)
@@ -347,7 +344,7 @@ export const APIGetDelaySchedules = async (userpk:number) => {
           query:query
         }
       )
-  
+     console.log(response.data)
       return response.data
     }catch(error){
      console.log("APIGetDelaySchedulesError:", error)
@@ -359,7 +356,7 @@ export const APIDeleteDelaySchedule = async(pk:number) => {
     try{
       const  mutation = `
 mutation{
-  deleteDelayschedule(pk:${pk}){
+  deleteDelaySchedule(pk:${pk}){
     status
   }
 }

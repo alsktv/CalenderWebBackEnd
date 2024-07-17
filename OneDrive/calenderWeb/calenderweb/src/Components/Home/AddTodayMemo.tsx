@@ -7,10 +7,11 @@ import { APIPostUserMemo, APIPutUserMemo } from "../../api";
 interface IProp {
   isOpen:boolean
   onClose: () => void
+  subOnClick : () => void
 }
 
 
-export default function AddTodayMemo ({isOpen , onClose }:IProp) {
+export default function AddTodayMemo ({isOpen , onClose ,subOnClick }:IProp) {
   /////////////////////////////////////////////////////////////////////////////
   //1.프로그램에 필요한 변수들 저장
   /////////////////////////////////////////////////////////////////////////////
@@ -24,13 +25,30 @@ export default function AddTodayMemo ({isOpen , onClose }:IProp) {
 
 
 
+    /////////////////////////////////////////////////////////////////////////////
+  //프로그램에 필요한 함수들 저장
+  /////////////////////////////////////////////////////////////////////////////
+
+
+  //1. keydown을 다루는 함수 만들기
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      onClickAddButton();
+    }
+  };
+
+
+
   /////////////////////////////////////////////////////////////////////////////
   //2.뮤테이션 변수들
   /////////////////////////////////////////////////////////////////////////////
 
    const PostTodayMemoMutation = useMutation(APIPostUserMemo,{
-    onSuccess:(date)=>{
-      
+    onSuccess:(date)=>{    
+      onClose()
+      subOnClick()
     }
    })
 
@@ -59,10 +77,10 @@ export default function AddTodayMemo ({isOpen , onClose }:IProp) {
   return(
     <Modal isOpen = {isOpen} onClose={onClose}>
       <ModalContent left={200}>
-        <VStack>
+        <VStack onKeyDown={handleKeyDown}>
           <Text>{year}/{month}/{day}</Text>
           <Text>메모:<Textarea value={writeMemo} placeholder="메모를 입력해주세요" onChange={onChangeMemo}/></Text>
-          <Button onClick={onClickAddButton}> 추가</Button>
+          <Button onClick={onClickAddButton} > 추가</Button>
         </VStack>
 
         

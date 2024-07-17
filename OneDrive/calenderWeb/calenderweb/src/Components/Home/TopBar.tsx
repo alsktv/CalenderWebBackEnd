@@ -1,7 +1,7 @@
 import {Box, Button, HStack, useDisclosure} from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import FCalenderDelayModal from './CalenderDelayModal';
-import FCalenderAddModal from './CalenderAddModal';
+import FCalenderAddModal from './AddModuleModal';
 
 export default function FTopBar() {
 

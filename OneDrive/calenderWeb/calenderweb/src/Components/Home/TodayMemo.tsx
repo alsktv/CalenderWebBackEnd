@@ -61,6 +61,23 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
     mutation.mutate(Number(userPk))
   }
 
+  // 3 -> AddTodayMemo에 보낼 함수. 즉시 변경사항이 적용되게 만들어준다.
+  const subOnClick = () => {
+    mutation.mutate(Number(userPk))
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement> , index:number) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      if(index === 0){
+        putMemoOnOpen()
+      }else{
+        addMemoOnOpen()
+      }
+    }
+  };
+
   
     ////////////////////////////////////////////////////////////////////////////
   //4.mutation변수들
@@ -71,7 +88,7 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
   const mutation = useMutation(APIGetUserMemo,{
     onSuccess:(data)=>{
       const userMemos: IUserMemo[] = data.data.dateUserMemos
-      const newMemos = userMemos.filter(item =>item.date === `${year}-${month?.padStart(2, '0')}-${day}` )
+      const newMemos = userMemos.filter(item =>item.date === `${year}-${month?.padStart(2, '0')}-${day?.padStart(2, '0')}` )
       setTodayMemo(newMemos)
     }
   })
@@ -93,19 +110,15 @@ export default function FTodayMemo({isOpen,onClose}:IProp){
          <Text> {year } /  {month} / {day}  메모 </Text>
          {IsTodaymemos()
          ?
-         <VStack>
-         {todayMemo ? <Text>{todayMemo[0]?.description}</Text> :null}
+         <VStack onKeyDown={(event) => {handleKeyDown(event,0)}}>
+         {todayMemo ? <Text>{todayMemo[0]?.description}</Text> :<Text></Text>}
          <Button w={"20%"} onClick={putMemoOnOpen}> 메모 수정</Button>
          <PutTodayMemo isOpen = {putMemoIsOpen} onClose={putMemoOnClose} subOnChange = {subOnChange}/>
          </VStack>
          :
-         <Box>
-          <Button w={"20%"} onClick={
-            ()=>{
-              addMemoOnOpen()
-            }
-              }> 메모 추가</Button> 
-          <AddTodayMemo isOpen={addMemoIsOpen} onClose={addMemoOnClose} />
+         <Box onKeyDown={(event) => {handleKeyDown(event , 1)}}>
+          <Button w={"20%"} onClick={addMemoOnOpen}> 메모 추가</Button> 
+          <AddTodayMemo isOpen={addMemoIsOpen} onClose={addMemoOnClose} subOnClick = {subOnClick}/>
       
           
         </Box>

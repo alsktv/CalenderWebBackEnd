@@ -1,4 +1,4 @@
-import {  Box, Button, Text, useDisclosure,  } from "@chakra-ui/react";
+import {  Box, Button, Center, Text, useDisclosure,  } from "@chakra-ui/react";
 import { useMutation } from "react-query";
 import { APIGetTotalMemo } from "../../api";
 import { useEffect, useState } from "react";
@@ -29,6 +29,7 @@ export default function FTotalMemo(){
   const subOnChange = () => {
     getTotalMemoMutation.mutate(Number(userPk))
   }
+
 
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -66,8 +67,9 @@ export default function FTotalMemo(){
 
   return(
      <Box maxW='sm' borderWidth='3px' borderRadius='lg' overflow='hidden' w={250}>
+      <Text textAlign={"center"} color={"blue"}> 메모장 </Text>
        <Text> {totalMemo}</Text>
-       <Button onClick={PutTotalMemoOnOpen}> 수정</Button>
+       <Button onClick={PutTotalMemoOnOpen} > 수정</Button>
        <PutTotalMemo isOpen={PutTotalMemoIsOpen} onClose={PutTotalMemoOnClose} subOnChange={subOnChange}/>
      </Box>
   )

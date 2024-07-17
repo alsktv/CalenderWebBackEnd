@@ -19,7 +19,7 @@ interface IProp {
 
 export default function FAddModuleModal({isOpen,onClose,onClickButton}:IProp) {
 
-  const {year,month,day,userPk } = useParams()
+  const {userPk } = useParams()
 
 
   const mutation = useMutation(APIPostScheduleModule,{
@@ -45,10 +45,19 @@ export default function FAddModuleModal({isOpen,onClose,onClickButton}:IProp) {
     }
   }
 
+   //keydown에 등록하기 위한 함수
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      onClickInputButton();
+    }
+  };
+
   return (
   <Modal isOpen = {isOpen} onClose={onClose}>
-    <ModalContent left={200}>
-       <VStack>
+    <ModalContent left={200} onKeyDown={handleKeyDown}>
+       <VStack >
          <Text>내용:<Input placeholder="모듈 내용 입력" value={description} onChange={onChangeDescription}></Input></Text>
          <Button onClick={onClickInputButton}>입력</Button>
        </VStack>

@@ -30,6 +30,20 @@ export default function PutTotalMemo ({isOpen , onClose , subOnChange }:IProp) {
 
 
 
+    /////////////////////////////////////////////////////////////////////////////
+  //프로그램에 필요한 함수들 저장
+  /////////////////////////////////////////////////////////////////////////////
+
+  //1. 엔터키를 눌렀을 때 입력될 수 있게 만드는 함수. keydown에 등록하기 위해 만든 함수
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      onClickPutButton();
+    }
+  };
+
+
   /////////////////////////////////////////////////////////////////////////////
   //2.뮤테이션 변수들
   /////////////////////////////////////////////////////////////////////////////
@@ -87,8 +101,8 @@ export default function PutTotalMemo ({isOpen , onClose , subOnChange }:IProp) {
 
   
   return(
-    <Modal isOpen = {isOpen} onClose={onClose}>
-      <ModalContent left={200}>
+    <Modal isOpen = {isOpen} onClose={onClose} >
+      <ModalContent left={200} onKeyDown={handleKeyDown}>
         <VStack>
           {writeMemo ?      <Text>전체메모:<Textarea value={writeMemo.description} onChange={onChangeMemo}/></Text> :null}
           <Button onClick={onClickPutButton}> 입력</Button>

@@ -83,6 +83,15 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
     getModuleMutation.mutate(Number(userPk))
   }
 
+  // keydown을 위한 함수
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      addonOpen()
+    }
+  };
+
 
 
 
@@ -129,11 +138,11 @@ export default function FCalenderAddModal({isOpen,onClose}:IProp){
   return(
     
     <Modal isOpen = {isOpen} onClose={onClose}>
-      <ModalContent left={200}>
-        <VStack>
+      <ModalContent left={200} onKeyDown={handleKeyDown}>
+        <VStack align="stretch" spacing={4} >
           {module ?   module?.map((item:IModule,index)=>(
-          <Box key={item.pk}>
-            <HStack>
+          <Box key={item.pk} textAlign={"center"} display={"flex"}>
+            <HStack justify="space-between" w={"60%"} alignItems={"center"}>
               <Button onClick={() => {onClickDeleteButton(item.pk)}}>X</Button>
               <Text>{item.description}</Text>
               <Button onClick={()=>{onClickAddButton(index , item.description)}}>+</Button>

@@ -1,6 +1,6 @@
 import {  Button, Input, Modal, ModalContent , Text, VStack  } from "@chakra-ui/react";
-import { useState } from "react";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
+import { useState , useRef} from "react";
+import {  useMutation} from "react-query";
 import { APIPostSchedule } from "../../api";
 import { useParams } from "react-router-dom";
 
@@ -21,7 +21,6 @@ export default function FAddScheduleModal({isOpen,onClose,onClickButton}:IProp) 
 
   const {year,month,day } = useParams()
 
-  const queryClient = useQueryClient();
 
   const mutation = useMutation(APIPostSchedule,{
     onSuccess:(data)=>{
@@ -60,13 +59,41 @@ export default function FAddScheduleModal({isOpen,onClose,onClickButton}:IProp) 
     
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+    if (event.key === 'Enter') {
+      //기본동작인 줄바꿈 동작을 막아주어야 함.
+      event.preventDefault()
+      onClickInputButton()
+    } else if(event.key === "ArrowUp") {   // 업버튼을 눌렀을 시 작동됨
+      event.preventDefault()
+      const setIndex = index === 0 ? 0 : index -1 
+      inputRefs.current[setIndex]?.focus()
+    } else if(event.key === "ArrowDown") {   // 업버튼을 눌렀을 시 작동됨
+      event.preventDefault()
+      const setIndex = index === 2 ? 2 : index + 1 
+      inputRefs.current[setIndex]?.focus()
+    }
+  };
+
+  //인풋창을 만드는대 필요한 리스트
+  const itemText = [{text:"내용" , function:onChangeDescription , value: description},{text:"시" , function:onChangeHours ,  value: hours},{text:"분" , function:  onChangeMinutes , value:minutes }]
+
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+
   return (
   <Modal isOpen = {isOpen} onClose={onClose}>
-    <ModalContent left={200}>
+    <ModalContent left={200} >
        <VStack>
-         <Text>내용:<Input placeholder="일정 내용 입력" value={description} onChange={onChangeDescription}></Input></Text>
-         <Text>시:<Input placeholder="시 입력" value={hours} onChange={onChangeHours}></Input></Text>
-         <Text>분:<Input placeholder="분 입력" value={minutes} onChange={onChangeMinutes}></Input></Text>
+        {itemText.map((item , index) => (
+  <Text>{item.text}:
+  <Input placeholder={item.text}
+         value={item.value}
+        onChange={item.function} 
+        ref={(el) => {if(el){
+    (inputRefs.current[index] = el)
+  }}} 
+  onKeyDown={(event) => {handleKeyDown(event,index)}}></Input></Text>
+        ))}
          <Button onClick={onClickInputButton}>입력</Button>
        </VStack>
     </ModalContent>

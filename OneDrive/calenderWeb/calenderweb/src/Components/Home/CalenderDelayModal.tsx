@@ -60,16 +60,15 @@ export default function FCalenderDelayModal({isOpen,onClose}:IProp){
   const getMutation = useMutation(APIGetDelaySchedules,{
     onSuccess:(data) => {
       setDelaySchedule(data.data.delaySchedules)
+
     }
   })
 
     //2 -> delaySchedule을 삭제하는 뮤테이션 함수
     const deleteMutation = useMutation(APIDeleteDelaySchedule,{
       onSuccess:(data) => {
-        console.log(data)
-        if(data.data.deleteDelayschedule.status === "ok"){
           getMutation.mutate(Number(userPk))
-        }
+          console.log("work")
       }
     })
 
@@ -95,7 +94,7 @@ export default function FCalenderDelayModal({isOpen,onClose}:IProp){
            </HStack>
           </Box>
     
-         )) : null}
+         )) : <Text> 밀린 일정이 없습니다.</Text>}
       </ModalContent>
     </Modal>
   )
