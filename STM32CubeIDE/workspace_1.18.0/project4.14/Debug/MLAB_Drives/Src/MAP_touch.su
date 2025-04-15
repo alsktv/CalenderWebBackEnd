@@ -1,0 +1,4 @@
+../MLAB_Drives/Src/MAP_touch.c:22:6:Touch_read	24	static
+../MLAB_Drives/Src/MAP_touch.c:40:6:Touch_read_raw	40	static
+../MLAB_Drives/Src/MAP_touch.c:60:6:Touch_spi	24	static
+../MLAB_Drives/Src/MAP_touch.c:105:6:Touch_delay	16	static

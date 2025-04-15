@@ -1,0 +1,16 @@
+../MLAB_Drives/Src/MAP_LCD.c:27:6:LCD_BL_on	1
+../MLAB_Drives/Src/MAP_LCD.c:32:6:LCD_BL_off	1
+../MLAB_Drives/Src/MAP_LCD.c:38:6:LCD_Check_ID	1
+../MLAB_Drives/Src/MAP_LCD.c:50:6:LCD_init	1
+../MLAB_Drives/Src/MAP_LCD.c:195:6:LCD_SetPos	1
+../MLAB_Drives/Src/MAP_LCD.c:206:6:LCD_Clear	2
+../MLAB_Drives/Src/MAP_LCD.c:221:6:LCD_Draw_Point	1
+../MLAB_Drives/Src/MAP_LCD.c:247:6:LCD_Draw_Line	8
+../MLAB_Drives/Src/MAP_LCD.c:283:6:LCD_Draw_Circle	2
+../MLAB_Drives/Src/MAP_LCD.c:293:6:LCD_Draw_Filled_Circle	2
+../MLAB_Drives/Src/MAP_LCD.c:306:6:LCD_Draw_Char	9
+../MLAB_Drives/Src/MAP_LCD.c:332:6:LCD_Draw_Str	9
+../MLAB_Drives/Src/MAP_LCD.c:355:6:LCD_printf	17
+../MLAB_Drives/Src/MAP_LCD.c:428:6:LCD_font_set	2
+../MLAB_Drives/Src/MAP_LCD.c:436:6:LCD_Draw_Rectangle	1
+../MLAB_Drives/Src/MAP_LCD.c:444:6:LCD_Block_Clear	3

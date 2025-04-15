@@ -1,0 +1,10 @@
+../Core/Src/calculator.c:35:5:map_touch_to_lcd_x	16	static
+../Core/Src/calculator.c:41:5:map_touch_to_lcd_y	16	static
+../Core/Src/calculator.c:50:8:parse_number	32	static
+../Core/Src/calculator.c:61:8:parse_factor	24	static
+../Core/Src/calculator.c:78:8:parse_term	40	static
+../Core/Src/calculator.c:99:8:parse_expression	40	static
+../Core/Src/calculator.c:114:8:evaluate_expression	24	static
+../Core/Src/calculator.c:120:6:draw_buttons	48	static
+../Core/Src/calculator.c:131:5:get_touched_button	48	static
+../Core/Src/calculator.c:142:6:calculator_process_touch	64	static

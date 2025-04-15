@@ -1,0 +1,4 @@
+../Core/Src/WriteApp.c:29:17:get_pen_color	3
+../Core/Src/WriteApp.c:37:6:WriteApp_draw_buttons	1
+../Core/Src/WriteApp.c:52:6:WriteApp_init	1
+../Core/Src/WriteApp.c:57:6:WriteApp_process_touch	9
